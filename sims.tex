@@ -63,6 +63,8 @@
 \newcommand\betahat{\hat{\beta}}
 \newcommand\tauhat{\hat{\tau}}
 
+\newcommand\crk[1]{{\bf [CRK: #1]}}
+\newcommand\cvm[1]{{\bf [CVM: #1]}}
 
 \newcounter{Affiliation}
 \newcommand{\aftext}[1]{\refstepcounter{Affiliation}\altaffilmark{\theAffiliation}#1}
@@ -86,7 +88,7 @@ Ann I. Zabludoff\altaffilmark{\ref{af:Arizona}}
 }
 
 \affil{
-\aftext{Las Cumbres Observatory Global Telescope Network, 6740 Cortona Dr Suite 102, Goleta, CA 93117-5575, USA\label{af:LCOGT}}\\
+\aftext{Las Cumbres Observatory, 6740 Cortona Dr Suite 102, Goleta, CA 93117-5575, USA\label{af:LCOGT}}\\
 \aftext{Department of Physics, University of California, Santa Barbara, CA 93106-9530, USA\label{af:UCSB}}\\
 \aftext{Department of Physics and Astronomy, Rutgers, the State University of New Jersey, 136 Frelinghuysen Road, Piscataway, NJ 08854, USA.\label{af:Rutgers}}\\
 \aftext{Institute of Astronomy and Astrophysics, Academia Sinica (ASIAA), P.O. Box 23-141, Taipei 10617, Taiwan
@@ -97,9 +99,8 @@ Ann I. Zabludoff\altaffilmark{\ref{af:Arizona}}
 \altaffiltext{*}{\email{}{cmccully@lcogt.net}}
 \altaffiltext{$\dagger$}{EACOA Fellow}
 
-
 \begin{abstract}
-Matter near a gravitational lens galaxy or projected along the line of sight (LOS) can affect strong lensing observables by more than contemporary measurement errors. We simulate lens fields with realistic three-dimensional mass configurations (self-consistently including voids), and then use lens models to quantify biases and uncertainties associated with different ways of treating the lens environment (ENV) and LOS. We identify the combination of mass, projected offset, and redshift that determines the importance of a perturbing galaxy for lensing. Foreground structures have a stronger effect on the lens potential than background structures, due to non-linear effects in the foreground and downweighting in the background. There is dramatic variation in the net strength of ENV/LOS effects across different lens fields; modeling fields individually yields stronger priors on $H_0$ than ray tracing through N-body simulations. Lens systems in groups tend to have stronger ENV/LOS contributions than non-group lenses. In models, ignoring mass outside the lens yields poor fits and biased results. Adding an external shear can account for tidal stretching from galaxies at redshifts $z \ge z_{\rm lens}$, but it requires corrections for external convergence and cannot reproduce non-linear effects from foreground galaxies. Using the tidal approximation is reasonable for most perturbers as long as non-linear redshift effects are included. Yet even when non-linear effects are included, the scatter in $H_0$ is limited by the lens profile degeneracy. Asymmetric image configurations produced by highly elliptical lens galaxies are less sensitive to the lens profile degeneracy, so they offer appealing targets for precision lensing analyses in future surveys like LSST.
+Matter near a gravitational lens galaxy or projected along the line of sight (LOS) can affect strong lensing observables by more than contemporary measurement errors. We simulate lens fields with realistic three-dimensional mass configurations (self-consistently including voids), and then use lens models to quantify biases and uncertainties associated with different ways of treating the lens environment (ENV) and LOS. We identify the combination of mass, projected offset, and redshift that determines the importance of a perturbing galaxy for lensing. Foreground structures have a stronger effect on the lens potential than background structures, due to non-linear effects in the foreground and downweighting in the background. There is dramatic variation in the net strength of ENV/LOS effects across different lens fields; modeling fields individually yields stronger priors for $H_0$ than ray tracing through N-body simulations. Lens systems in groups tend to have stronger ENV/LOS contributions than non-group lenses. In models, ignoring mass outside the lens yields poor fits and biased results. Adding external shear can account for tidal stretching from galaxies at redshifts $z \ge z_{\rm lens}$, but it requires corrections for external convergence and cannot reproduce non-linear effects from foreground galaxies. Using the tidal approximation is reasonable for most perturbers as long as non-linear redshift effects are included. Yet even then, the scatter in $H_0$ is limited by the lens profile degeneracy. Asymmetric image configurations produced by highly elliptical lens galaxies are less sensitive to the lens profile degeneracy, so they offer appealing targets for precision lensing analyses in future surveys like LSST and Euclid.
 \end{abstract}
 
 \maketitle
@@ -109,30 +110,32 @@ Matter near a gravitational lens galaxy or projected along the line of sight (LO
 % Reset the footnote counter because star and dagger count as footnotes
 \setcounter{footnote}{0}
 %%%%%%%%%%%%%%%%%%%%%%%%
-Strong gravitational lensing is an important probe for many facets of cosmology. Analysis of strong lenses has led to constraints on the masses and properties of dark matter halos of galaxies \citep[e.g.,][]{Keeton98,Treu06,Koopmans06,Barnabe09,Auger10,Treu10,Lagattuta12,Wong14}, substructure in galaxy halos \citep[e.g.,][]{Mao98,Metcalf01,Dalal02,Vegetti14,Hezaveh14}, and the Hubble constant, independent of the cosmic distance ladder \citep[e.g.][]{Refsdal64,Keeton97_PG1115,Kochanek03,Saha06,Oguri07,Suyu10,Suyu13, Birrer15, Chen16}. Strong lensing may also be employed to constrain the properties of dark energy \citep[e.g.,][]{Turner90,Linder04,Linder11,Cao12,Treu13}.
+Strong gravitational lensing is an important probe for many facets of cosmology. Analysis of strong lenses has led to constraints on the masses and properties of dark matter halos of galaxies \citep[e.g.,][]{Keeton98,Treu06,Koopmans06,Barnabe09,Auger10,Treu10_galaxies,Lagattuta12,Wong14}, substructure in galaxy halos \citep[e.g.,][]{Mao98,Metcalf01,Dalal02,Vegetti14,Hezaveh14}, and the Hubble constant, independent of the cosmic distance ladder \citep[e.g.,][]{Refsdal64,Keeton97_PG1115,Kochanek03,Saha06,Oguri07,Suyu10,Suyu13, Birrer15, Chen16, Bonvin16, Suyu16, Wong16}. Strong lensing may also be employed to constrain the properties of dark energy \citep[e.g.,][]{Turner90,Linder04,Linder11,Cao12,Treu13}.
 
-In recent years, both the quantity and quality of strong lens data have improved. There are now roughly a hundred known lensed QSOs (e.g.,\ \fnurl{CASTLeS}{http://www.cfa.harvard.edu/castles/}; \citealt{SQLS,CLASS}) and a comparable number of strongly lensed galaxies \citep[e.g.,][]{Bolton08,Cassowary}. These samples will increase dramatically in the near future with LSST \citep[e.g.,][]{LSST, Coe09, Oguri10, Collett15}. Here, we focus on lensed QSOs because the compact source can vary rapidly enough to enable measurements of lens time delays (though much of this discussion also applies to strongly lensed supernovae; \citealt{Kelly15}). The relative positions and fluxes of lensed QSO images are routinely measured to high precision using the \textit{Hubble Space Telescope} \citep[e.g,.][and references therein; CASTLeS Collaboration]{Lehar00,Sluse12}. Our understanding of gravitational lenses and the constraints they place on cosmology is no longer limited by observations, but by systematic uncertainties. 
+In recent years, both the quantity and quality of strong lens data have improved. There are now roughly a hundred known lensed QSOs (e.g.,\ \fnurl{CASTLeS}{http://www.cfa.harvard.edu/castles/}; \citealt{SQLS,CLASS}) and a comparable number of strongly lensed galaxies \citep[e.g.,][]{Bolton08,Cassowary}. These samples will increase dramatically in the near future with LSST and Euclid \citep[e.g.,][]{LSST, Coe09, Refregier10, Oguri10, Collett15}. Here, we focus on lensed QSOs because the compact source can vary rapidly enough to enable measurements of lens time delays (though much of this discussion also applies to strongly lensed supernovae; \citealt{Kelly15, Kelly16, Rodney16}). The relative positions and fluxes of lensed QSO images are routinely measured to high precision using the \textit{Hubble Space Telescope} \citep[e.g,.][and references therein; CASTLeS Collaboration]{Lehar00,Sluse12}. Our understanding of gravitational lenses and the constraints they place on cosmology is no longer limited by observations, but by systematic uncertainties. 
 
-One of the key issues is that lens galaxies are not isolated systems. Matter in the environment of the lens galaxy and projected along the line of sight (hereafter ENV/LOS) can produce perturbations in the lensing potential that cannot be ignored as we enter the era of ``Precision Lensing'' (which we define by the goal of constraining the Hubble constant to $<1\%$). Mass that is not physically associated with lens galaxy but lies close in projection can also produce perturbations to the lens potential \citep[e.g.,][]{Bar-Kana96,Momcheva06,Wong11}. \citet{Jaroszynski14} show that omitting ENV/LOS effects can often lead to unsuccessful fits, especially when time delay constraints are included.
+One of the key issues is that lens galaxies are not isolated systems. Matter in the environment of the lens galaxy and projected along the line of sight (hereafter ENV/LOS) can produce perturbations in the lensing potential that cannot be ignored as we enter the era of ``Precision Lensing'' (which we define by the goal of constraining the Hubble constant to $<1\%$). Mass that is not physically associated with lens galaxy but lies close in projection can also produce perturbations to the lens potential \citep[e.g.,][]{Bar-Kana96,Momcheva06,Wong11, Collett16}. \citet{Jaroszynski14} show that omitting ENV/LOS effects can often lead to unsuccessful fits, especially when time delay constraints are included. \citet{Collett16} argue that lensed QSOs are more likely to have an overdense LOS than the global population which can lead to a bias in the inferred Hubble constant from a sample of lensed QSOs.
 
 To lowest order, using the ``tidal approximation,'' perturbing galaxies contribute ``external convergence,'' which produces extra (de-)magnification, and ``external shear,'' which stretches the images of the source, transforming circles to ellipses. External convergence due to the ENV/LOS is one of the dominant components of the uncertainty budget for measurements of the Hubble constant \citep{Suyu12}.
 
-Our goal for this work is to quantify the effects of mass outside the main lens galaxy on the measured cosmology,\footnote{Here we focus on the Hubble constant, but similar arguments apply for time-delay cosmography measurements that have been proposed to be used to measure dark energy \citep{Treu13}.}, addressing the following questions:
+Our goal for this work is to quantify the effects of mass outside the main lens galaxy on the measured cosmology,\footnote{Here we focus on the Hubble constant, but similar arguments apply for time-delay cosmography measurements that have been proposed to be used to measure dark energy \citep{Treu13}.} addressing the following questions:
 Which individual perturbing galaxies are the most important?
 What is the range of ENV/LOS contributions?
 What drives the bias and scatter in reproducing lensing observables from lens systems in realistic ENV/LOS mass distributions?
 Which lens systems produce the strongest constraints on the Hubble constant?
 
-To answer these questions, we build mass models for the ENV/LOS using extensive photometric and spectroscopic data for $\sim25$ strong lensing systems \citep{Momcheva06,Williams06,Momcheva15}. We embed a lens galaxy in these models and ray trace through the full three-dimensional matter distributions to generate mock lensing observables. We then fit these lensing observables with three different lensing models, which have different methodologies for treating the lensing ENV/LOS,
+To answer these questions, we build mass models for the ENV/LOS using extensive photometric and spectroscopic data for $\sim25$ strong lensing systems \citep{Momcheva06,Williams06,Momcheva15}. We embed a lens galaxy in these models and ray trace through the full three-dimensional matter distributions to generate mock lensing observables. We then fit these lensing observables with lens models, which treat the ENV/LOS in increasingly accurate (but complex) way,
 to understand the precision and accuracy of the recovered lens galaxy properties and $H_0$.
 
-The first method (which we term ``Lens-Only'') neglects mass outside the main lens altogether.  This approach is almost surely produces biased constraints on the Hubble constant, and so it is rarely used in studies that derive constraints on precision cosmology, but it still appears in some studies that focus on lens and source properties \citep[e.g.][]{Calanog14, Hezaveh13}.
+The simplest model (which we term ``Lens-Only'') neglects mass outside the main lens altogether. This model serves as a control for our experiments allowing us to quantify the overall importance of the ENV/LOS for constraining cosmology. This approach almost surely produces biased constraints on the Hubble constant, and so it is rarely used in studies that derive constraints on precision cosmology, but it still appears in some studies that focus on lens and source properties \citep[e.g.,][]{Calanog14, Hezaveh13}.
 
-The second method (``Lens+Shear'') accounts for tidal effects in the lens plane by treating the magnitude and direction of the external shear as free parameters to be optimized for individual lens systems. This widely-used approach has several limitations. First, the tidal approximation neglects higher-order effects beyond shear, which may be significant for objects sufficiently close to the optical axis. This approach also neglects non-linear effects that arise from having mass in multiple redshift planes \citep[][]{McCully14,Jaroszynski12}. Also, lens models cannot directly constrain the external convergence because of the mass sheet degeneracy \citep{Falco85}.  To avoid biases in the derived cosmological parameters, corrections for external convergence must be applied using additional constraints such as weak lensing \citep{Nakajima09, Fadely10} or the number density of galaxies near the lens \citep[][Rusu et al.\ in preparation]{Suyu10, Suyu13, Collett13, Greene13} calibrated by ray tracing through cosmological simulations \citep[e.g.,][]{Hilbert09}. \citet{Schneider13} have raised concerns because these corrections are calibrated on scales much larger than those relevant for strong lensing.  Also, the corrections are derived from statistical studies that may have limited applicability to individual lens environments. Finally, the shear derived from lens models does not always match the shear calculated from modeling the ENV/LOS directly \citep{Wong11}.
+Next we add one new term to our model: this type of model, ``Lens+Shear'', accounts for tidal effects in the lens plane by treating the magnitude and direction of the external shear as free parameters to be optimized for individual lens systems. This gives the model some freedom to adjust for the ENV/LOS, but this widely used model has some limitations. First, this model neglects non-linear effects that arise from having mass in multiple redshift planes along the LOS \citep[][]{McCully14,Jaroszynski12}. Also, this model treats the entire ENV/LOS in the tidal approximation: this neglects higher-order effects beyond shear, which may be significant for objects sufficiently close to the optical axis. Also, lens models cannot directly constrain the external convergence because of the mass sheet degeneracy \citep{Falco85}.  To avoid biases in the derived cosmological parameters, corrections for external convergence must be applied using additional constraints such as weak lensing \citep{Nakajima09, Fadely10} or the number density of galaxies near the lens \citep{Suyu10, Suyu13, Collett13, Greene13, Rusu16, Wong16} calibrated by ray tracing through cosmological simulations \citep[e.g.,][]{Hilbert09}. However, these corrections are derived from statistical studies that may have limited applicability to individual lens environments. Also, the shear derived from lens models does not always match the shear calculated from modeling the ENV/LOS directly \citep{Wong11}.
 
-The third method (``3-D Lens'') is to build full, three-dimensional lens models that explicitly account for mass in the environment and along the LOS. While our modeling approach is more complicated and observationally expensive, our lens models have a direct connection between the convergence and shear in lens models and the physical mass in the beam. The full multi-plane lens equation is not computationally tractable for use with these complex models, so we use the framework we developed in \citet[hereafter M14]{McCully14}. In our framework, most (or all) of the ENV/LOS galaxies are treated using the tidal approximation, but preserves the full three dimensional structure of the mass distribution. This has two major benefits. The first is that we can balance efficiency (by treating galaxies in the tidal approximation) and accuracy (by including non-linear redshift effects not captured by a simple, external shear). The second benefit is that by varying which galaxies are treated exactly, we can disentangle non-linear effects produced by galaxies along the LOS, and higher order terms produced by ENV/LOS galaxies that are close in projection to the lens.
+The third type of model we consider explicitly accounts for mass in the environment and along the LOS including redshift effects, so we have called this the ``3-D Lens'' model. We first consider the case when all of the ENV/LOS galaxies are treated using the tidal approximation. The difference between these models and the Lens+Shear models is that the shear is no longer included only in the main lens plane. Instead we use ``3-D Tidal Matrices`` that capture the redshift effects, and propagate their non-linear effects through the multi-plane lens equation (see Section \ref{sec:losframework}; \citealt{McCully14}, hereafter M14). For this analysis, the 3-D Tidal Matrices are fixed, but in priciple could also be allowed to vary in the fits. By comparing the recovered parameters in these 3-D Lens models to the Lens+Shear models, we can quantify the contribution of the non-linear redshift effects to the cosmological error budget. We note that the convergence is explicitly included in our 3-D Tidal Matrices, so adding an external converence in post processing is unnecessary.
 
- Section \ref{sec:3DMassModels} describes our methodology for handling 3-D mass models, including a new treatment of voids in our multi-plane lensing formalism (Section \ref{sec:voids}). Once we have the mock lensing data, we fit different types of lens models to test how well we can recover parameters related to the input galaxy and cosmology.  In Section \ref{sec:Individual} we use the models to understand what makes a perturbing galaxy important for lensing, and we derive a quantity that shows the dependence on the perturber's mass, projected offset, and redshift. In Section \ref{sec:Environments} we use this quantity to characterize ENV/LOS effects and compare different lens fields. In Section \ref{sec:fitting} we then examine the parameters recovered from the different types of fitted models to understand statistical and systematic uncertainties that are associated with ENV/LOS effects. Finally, in Section \ref{sec:ImageConfigs} we vary the properties of the main lens galaxy to ascertain which lens systems will provide stronger constraints on the Hubble constant.
+Finally, we test 3-D lens models that include some perturbing galaxies exactly, rather than in the tidal approximation. By comparing the recovered cosmological parameters to the models that only include the 3-D Tidal Matrices, we can disentangle non-linear redshift effects, and test the importance of higher order terms for the most important pertrubing galaxies (we will quantify perturbing galaxy importance in Section \ref{sec:Individual}). As we include more and more galaxies exactly, our 3-D Lens models become indistinguishable from the original mass models that were used to generate the lensing observables. By examing the recovered parameters from these models, we can quantify the fundemental limitations on measuring the Hubble constant using gravitational lens models.
+
+ Section \ref{sec:3DMassModels} describes our methodology for building the mass models, including a new treatment of voids in our multi-plane lensing formalism (Section \ref{sec:voids}). Once we have the mock lensing data, we fit different types of lens models to test how well we can recover parameters related to the input galaxy and cosmology (i.e., the truth).  In Section \ref{sec:Individual} we use the models to understand what makes a perturbing galaxy important for lensing, and we derive a quantity that shows the dependence on the perturber's mass, projected offset, and redshift. In Section \ref{sec:Environments} we use this quantity to characterize ENV/LOS effects and compare different lens fields. In Section \ref{sec:fitting} we then examine the parameters recovered from the different types of fitted models to understand statistical and systematic uncertainties that are associated with ENV/LOS effects. Finally, in Section \ref{sec:ImageConfigs} we vary the properties of the main lens galaxy to ascertain which lens systems will provide stronger constraints on the Hubble constant.
 
 Throughout this paper we assume a cosmology with $\Omega_M = 0.274$, $\Omega_\Lambda = 0.726$, and $H_0 = 71$ km s$^{-1}$ Mpc$^{-1}$.
 
@@ -142,76 +145,36 @@ Throughout this paper we assume a cosmology with $\Omega_M = 0.274$, $\Omega_\La
 \label{sec:3DMassModels}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Our goal is to quantify ENV/LOS effects using realistic lensing beams. Since the analysis is inherently three-dimensional, we begin by reviewing multi-plane lensing as the analytical infrastructure that is necessary any time we consider mass at a different redshift than the main lens galaxy (Section \ref{sec:losframework}). To examine ENV/LOS effects, we build mock lenses using realistic matter distributions based on our photometric and spectroscopic observations. Our mass models consist of two components: discrete mass structures such as group and galaxy halos, which are discussed in Section \ref{sec:massmodels}; and a smooth background mass density, which can account for underdense regions (voids) and can be treated within our multi-plane lensing framework using the new approach described in Section \ref{sec:voids}. We ray trace from many source positions through these mass models to produce simulated lensing observables including image positions, flux ratios, and time delays, as discussed in Section \ref{sec:observables}. Finally, we fit these lensing observables with different models (described in Section \ref{sec:lensmodels}) to understand whether different assumptions about the ENV/LOS lead to bias and/or scatter in the recovered values of lens galaxy parameters and the Hubble constant.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Multi-plane Lensing\label{sec:losframework}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-As we are interested in how mass in the ENV/LOS affects lensing measurements, we must go beyond the standard lens equation that only includes a single lens. Instead we use the multi-plane lens equation (which makes the thin-lens approximation at each redshift of interest; \citealt{PLW}) that traces a light ray from the observer to the source, bending the ray at each redshift plane of interest. The full multi-plane lens equation is given by
-\begin{equation}
-\x_{j} = \x_1 - \sum_{i=1}^{j - 1} \beta_{i\,j} \al_i(\x_i),
-\label{eqn:full_mp}
-\end{equation}
-where 
-\begin{equation}
-\beta_{i\,j} = \frac{D_{i\,j} D_s}{D_{j}D_{i\,s}}.
-\end{equation}
-
-Our mass models typically contain hundreds of components, but many of the corresponding terms in the lens equation can be treated with the tidal approximation characterized by convergence and shear.\footnote{Sections \ref{sec:Individual} and \ref{sec:fitting} discuss the objective criterion we use to determine which perturbers can be treated with the tidal approximation.}  In our previous paper (M14; see \citealt{Schneider14} for an alternative derivation.), we presented a hybrid framework for multi-plane lensing that incorporates all of the tidal planes (weak lenses) into a set of matrices so the sum includes only ``main'' lens planes (strong lenses, i.e., those not treated with the tidal approximation). Our framework recovers the full multi-plane lens equation when all of the redshift planes are treated as ``main'' planes. Even when it uses the tidal approximation, our framework still includes non-linear effects associated with having mass at different redshifts.  The generalized expressions for the lens equation, magnification tensor, and time delay are as follows:
-\begin{eqnarray}
-\x_{j} &=& \B_i \x_1 - \sum_{\ell \in \{\ell_\mu<j\}} \C_{\ell j} \al_\ell(\x_\ell),\label{eqn:lenseqn}\\
-\A_{j} &=& \B_i - \sum_{\ell \in \{\ell_\mu<j\}} \C_{\ell j} \GammaMat_\ell \A_\ell,\\
-T &=& \frac{1}{2} \x_s \cdot \F_s \x \nonumber \\
-&&+ \sum\limits_{\ell \in \{\ell_\mu\}}\left[\frac{1}{2}\tau_{\ell s} \x_\ell \cdot \al_\ell -\frac{1}{2}\x_s \cdot \G_{\ell s}\al_\ell -\tau_{\ell s}\phi_\ell \right],
-\end{eqnarray}
-where the sums run over ``main'' planes, $\al_\ell$ is the deflection in main plane $\ell$, and  
-\begin{equation}
-\tau_{i\,j} = \frac{ 1 + z_i}{c} \frac{D_i D_j}{D_{i\,j}}.
-\end{equation}
-All of the tidal effects are characterized by the following matrices:
-\begin{eqnarray}
-\B_j &=& \I - \sum\limits_{i=1,i\not \in \{\ell_\mu\}}^{j-1}\beta_{ij}\GammaMat_i \B_i, \\
-\C_{\ell j} &=& \beta_{\ell j} \I - \sum\limits_{i=\ell+1, i\not\in\{\ell_\mu\}}^{j-1} \beta_{\ell i}\GammaMat_i\C_{\ell i}, \label{eqn:cmatdef}\\
-\F_j &\equiv& 
-%\tau_{j-1} \B_{j}-\tau_{j-1} \B_{j-1} \ =\ 
-  - \sum\limits_{i=1,i\not \in \{\ell_\mu\}}^{j-1} \tau_{is}\GammaMat_i\B_i, \\
-\G_{\ell j}&\equiv& 
-%\tau_{j-1} \C_{\ell j}-\tau_{j-1} \C_{\ell \,j-1} \nonumber \\
-% &=&\ 
- \tau_{\ell s}\I- \sum\limits_{i=\ell+1,i \not \in \{\ell_\mu\}}^{j-1} \tau_{is}\GammaMat_i\C_{\ell i}.
-\end{eqnarray}
-These matrices can be computed once at the start of any lens modeling analysis and stored for repeated use.
-
-Note in eq.\ \ref{eqn:lenseqn} that each main plane needs to be evaluated using the positions $\x_\ell$, which are not generally the same as the positions $\x_1$ on the sky and must be computed with the lens equation. This distinction gives rise to non-linearities that cannot be mimicked by a simple shear. Our framework is therefore more accurate than fitting a simple shear, but it is also more efficient than the full multi-plane lens equation because the recursive sums include only main planes.  It fills the gap between using the full multi-plane lens equation (which can be computationally expensive) and treating everything as a simple external shear (which omits higher-order effects that can be significant for objects projected near the lens).
-
-If we take the observer to be in plane $i =0$, we can write $\beta_{0\,j} = 1$ and $\tau_{0\,j} = 0$. We then realize that the $\B$ and $\C$ matrices are related, as are the $\F$ and $\G$ matrices:
-\begin{equation}\label{eqn:BC-FG}
-\B_j = \C_{0 \, j}
-\qquad\mbox{and}\qquad
-\F_{j} = \G_{0 \, j}.
-\end{equation}
-
-If there is a single main plane, the multi-plane lens equation reduces to
-\begin{equation}
-\x_s = \B_s \x_1 - \C_{\ell s} \al(\B_\ell \x_1).
-\end{equation}
-This resembles the standard single-plane lens equation except that $\B_\ell$ appears in the argument of the deflection of the main lens galaxy, leading to non-linear effects that we quantify and explore using our numerical results in the following sections.
-
+Our goal is to quantify ENV/LOS effects using realistic lensing beams. To examine ENV/LOS effects, we build mock beams using realistic matter distributions based on our photometric and spectroscopic observations. Our mass models consist of two components: discrete mass structures such as group and galaxy halos, which are discussed in Section \ref{sec:massmodels}; and a smooth background mass density, which can account for under-dense regions (voids) and can be treated within our multi-plane lensing framework using the new approach described in Section \ref{sec:voids}. We ray trace from many source positions through these mass models to produce simulated lensing observables including image positions, flux ratios, and time delays, as discussed in Section \ref{sec:observables}. Finally, we fit these lensing observables with different models (described in Section \ref{sec:lensmodels}) to understand how different modelling assumptions about the ENV/LOS lead to bias and/or scatter in the recovered values of lens galaxy parameters and the Hubble constant.
 
 \subsection{Building Mass Models from Observations \label{sec:massmodels}}
+We begin by presenting our methodology for constructing mass models from photometric and spectroscopic observations. Our mass models are made of two components: a smooth background density and discrete objects, namely galaxies and group dark matter halos. We first consider the discrete structures in our models.
 
-Now we turn to our methodology for constructing mass models from photometric and spectroscopic observations. Here we consider the discrete structures in our models, namely galaxies and group dark matter halos. We construct mass models using an updated version of the methodology in \citet{Wong11}. Briefly, we start by assigning redshifts to the LOS galaxies that lack spectroscopy. If the field is in the SDSS footprint, we assign photometric redshifts from SDSS DR9 \citep{Ahn12, Csabai03}. If not, we draw from a smoothed version of the spectroscopic redshift distribution in that particular field. We model galaxies as singular isothermal spheres with velocity dispersions and truncation radii drawn from scaling relations (including scatter) derived from a galaxy-galaxy weak lensing analysis in the CFHTLS \citep{Brimioulle13}. For lenses that lie in a group or cluster, we treat the group member galaxies in a slightly different way. We compute a total dynamical mass for the group (\citealt{Girardi98,Momcheva06,Momcheva15}; Wilson et al.\ in preparation) and apportion the mass between the group dark matter halo and the group galaxies. The dark matter halo is assumed to be a spherical NFW profile. The halo concentration is taken from the mass-concentration relation from simulations by \citet{Zhao09}, with an assumed scatter of 0.14 dex \citep{Bullock01}. The fraction of the total group mass assigned to the halo, $f_{\rm{halo}}$, is randomly drawn from a uniform distribution such that the group galaxies are not truncated below twice their effective radii, nor beyond their $R_{200}$ (the radius at which the mean density enclosed is 200 times the matter density at that redshift). The remainder of the mass, $(1-f_{\rm{halo}})M_{\rm{group}}$, is assigned to the group galaxies, which are scaled such that they have the same density at their truncation radii. All group galaxies and the group halo are assumed to be in the same redshift plane as the lens, even though there may be slight redshift differences due to peculiar velocities. 
+\subsection{Discrete Mass Structures}
+We include discrete mass structures using an updated version of the methodology in \citet{Wong11}. We start by introducing galaxies detected in our photometric observations into our mass models. The photometric catalogs are based on 12 nights of imaging data from the 4m Mayall telescope on Kitt Peak and the 4m Blanco telescope on Cerro Tololo \citep{Williams06}. The photometric data is highly complete down to $I \leq 21.5$. For many of these objects, we have spectroscopic redshifts, which allows us to include them at their measured 3-D position (redshift and position on the sky). The spectroscopic sample is presented in \citet{Momcheva15}, and consists of 40 nights of 6.5m telescope observations using the LDSS-2, LDSS-3, IMACS, and Hectospec instruments (\citealt{Sluse16} present a similar dataset).
+For LOS galaxies that lack spectroscopy, we must assign a redshift to get its 3-D position. If the field is in the SDSS footprint, we assign photometric redshifts from SDSS DR9 \citep{Ahn12, Csabai03}. If not, we draw from a smoothed version of the spectroscopic redshift distribution in that particular field. When considering the full error budget analysis (see Section \ref{sec:Environments} and Wong et al. in prep.), we marginalize over the unknown redshifts by drawing many realizations from the spectroscopic redshift distribution of the beam. 
 
-For much of this paper, we fix the ENV/LOS mass models by setting parameters to their fiducial values. We will extend the analysis to include the uncertainties from generating these mass models briefly in Section \ref{sec:Environments} and in more detail in a forthcoming work (Wong et al.\ in preparation). 
+Once we have the 3-D position of the discrete mass structures (RA, Dec, and redshift), we must choose a mass distribution for the galaxy. We model each galaxy as a truncated singular isothermal sphere. This is a surprisingly good approximation for observed galaxy-scale lenses (e.g., \citealt{Rusin03, Gavazzi07, Koopmans09}, but see \citealt{Xu16}). Throughout our analysis, most of the galaxies included in our mass models are significantly offset in projection from the main lens galaxiy limiting our sensitivity to exact mass distibution of the galaxies along the LOS.
+
+The truncation radii are set to be equivilant to $r_{200}$. The velocity dispersions and $r_{200}$ are drawn from scaling relations (including scatter) derived from a galaxy-galaxy weak lensing analysis in the CFHTLS \citep{Brimioulle13}. We use the luminosity scaling relationships that evolve with redshift to find $r_{200}$ and velocity dispersion. We adopt the relations found in \citet{Brimioulle13} The relationship for $r_{200}$ is given by 
+$r_{200}/r_0 = (L / L_0)^{\eta_r}$ where $L_0 = 1.6 \times 10^{10}\  h^{-2} L_\odot (1+z)$. For blue galaxies ($B-V \leq 0.7$), $r_0 = 133 \pm 3 \ h^{-1}$ kpc and $\eta_r = 0.40 \pm 0.08$, while for red galaxies ($B-V > 0.7$), $r_0 = 198 \pm 3 \  h^{-1}$ kpc and $\eta_r = 0.38 \pm 0.04$. For the velocity dispersion scaling relations, \citet{Brimioulle13} give $\sigma / \sigma_0 = (L / L0) ^{\eta_\sigma}$. $L_0$ is the same as for the radius scaling relation. For blue galaxies, $\sigma_0 = 123 \pm 3$ km s$^{-1}$ and $\eta_\sigma = 0.24 \pm 0.03$, while for red galaxies, $\sigma_0 = 173 \pm 2$ km s$^{-1}$ and $\eta_\sigma = 0.25 \pm 0.03$.
+
+For lenses that are in a group or cluster, we treat the group member galaxies in a slightly different way. We compute a total dynamical mass for the group (\citealt{Girardi98,Momcheva06,Ammons14,Momcheva15}; Wilson et al.\ submitted) and apportion the mass between the group dark matter halo and the group galaxies. The dark matter halo is assumed to be a spherical NFW profile. The halo concentration is taken from the mass-concentration relation from simulations by \citet{Zhao09}, with an assumed scatter of 0.14 dex \citep{Bullock01}. The fraction of the total group mass assigned to the halo, $f_{\rm{halo}}$, is randomly drawn from a uniform distribution such that the group galaxies are not truncated below twice their effective radii, nor beyond their $R_{200}$ (the radius at which the mean density enclosed is 200 times the matter density at that redshift). The remainder of the mass, $(1-f_{\rm{halo}})M_{\rm{group}}$, is assigned to the group galaxies, which are scaled such that they have the same density at their truncation radii. All group galaxies and the group halo are assumed to be in the same redshift plane as the lens, even though there may be slight redshift differences due to peculiar velocities. 
+
+Some lenses have groups along the LOS, (e.g., B0712; \citealt{Fassnacht02}). Groups along the LOS of sight are treated in less detail. The galaxies are included as described above, but mass is not apportioned to a group NFW halo. For this current work, we are less concerned about reproducing exact lens fields and are more concerned about producing \textit{realistic} 3-D mass models so that we can study how the LOS affects lens models. In future models we will account for groups along the LOS using an updated version of the methodology in \citet{Ammons14} (see also Wilson et al.\ submitted). 
+
+This methodology allows us to explicitly include matter that we see (e.g., galaxies). However, there may be matter that we do not observe like faint galaxies or dark matter filaments. We include the rest of that mass that we do not explicitly include in our discrete mass structures described above in a smooth, uniform mass component which is described in more detail in the next section.
 
 \subsection{Setting the Smooth Background Density}
 \label{sec:voids}
 
-We now turn our attention to the underlying, smooth density component of our mass models. In traditional single-plane lensing, it is reasonable to assume that the lens galaxy does not significantly contribute to the overall geometry of the universe, and thus to place it on top of a smooth background given by the mean density of the universe.  As we begin to include more and more galaxies along the line sight, however, the cosmological effects become non-negligible.  Simply adding the galaxies on top of the mean density would lead to biased results.  If our mass models were 100\% complete, there should be no smooth background component at all.  In practice, we need to find an intermediate approach that scales the background density to account for incompleteness in our mass models (which can arise, for example, from having flux-limited photometric and spectroscopic data).
+We now turn our attention to the underlying, smooth density component of our mass models. In traditional single-plane lensing, it is reasonable to assume that the lens galaxy does not significantly contribute to the overall geometry of the universe, and thus to place it on top of a smooth background given by the mean density of the universe.  As we begin to include more and more galaxies along the line sight, however, the cosmological effects of the mass included in our beams become non-negligible. Simply adding the galaxies on top of the mean density would lead to biased results. If our mass models were 100\% complete, there should be no smooth background component at all.  In practice, we need to find an intermediate approach that scales the background density to account for incompleteness in our mass models (which can arise, for example, from having flux-limited photometric and spectroscopic data).
 
-There are several ways we could do this.  One possibility is to start with an \emph{empty} beam and add both galaxies and a smooth density field.  However, we would still need to account for the mean density of the universe outside the beam when computing cosmic distances.  A different approach, which we prefer, is to start with a \emph{filled} beam and subtract a smooth density field that corresponds to the completeness of our mass model.  Then we can compute cosmic distances using the standard filled beam expressions but still account for the lensing effects produced by having a smooth background density that is less than the mean density.  In our framework, we can achieve the subtraction by inserting redshift planes with negative mass density in between the planes that contain galaxies.  In the limit of a large number of thin planes, the sums over ``void'' planes becomes integrals that we now derive.
+There are several ways we could do this. One possibility is to start with an \emph{empty} beam and add both galaxies and a smooth density field.  However, we would still need to account for the mean density of the universe outside the beam when computing cosmic distances.  A different approach, which we prefer, is to start with a \emph{mean density} beam. We can then subtract a smooth density field that corresponds to the amount of mass that we have included in our mass model by discrete structures (e.g., galaxies). The benefit is that we can then compute cosmic distances using the standard mean density universe expressions while still accounting for the lensing effects produced by having a smooth background density that is less than the mean density.
 
-Consider a plane that represents the projection of a thin slab extending from proper distance $r_p$ to $r_p+dr_p$.  If the density contrast within this slab is $\drho_p = \rho_p - \bar\rho_p$, the lensing effects are characterized by a convergence
+The key is that we need to estimate our mass completeness of our observations (and is therefore explicitly included as discrete structures) relative to the smooth mean density of the universe. We note that the mass completeness is not the same as the completeness of number of galaxies. We can then subtract off the fraction of mass in our discrete structures from the mean density of the universe.
+
+Consider a plane that represents the projection of a thin slab extending from proper distance $r_p$ to $r_p + dr_p$.  If the density contrast within this slab is $\drho_p = \rho_p - \bar\rho_p$, the lensing effects are characterized by a convergence
 \begin{equation}
   d\kappa = \frac{\drho_p\,dr_p}{\Sigcrit}
 \end{equation}
@@ -229,28 +192,76 @@ In order to achieve the desired subtraction, we set the density contrast to be
 \end{equation}
 where $f(z)$ is the mass completeness in our models (which can vary with redshift), and the mean density of the universe at redshift $z$ is $\bar{\rho}(z) = \rho_{c} \Omega_m (1 + z)^3$, where $\rho_{c} = 3 H_0^2 / 8 \pi G$ is the critical density of the universe today.
 
-We now need to incorporate the ``void'' planes into our LOS framework.  The general expression for the $\C$ matrix\footnote{The following argument also applies to the $\B$ matrices since they are a subset of the $\C$ matrices (see eq.\ \ref{eqn:BC-FG}).} between redshifts $z_i$ and $z_j$ is given in equation \ref{eqn:cmatdef}. The sum in that equation now includes both tidal and void planes, but we can handle the sums over void planes by redefining the $\beta$ factors as follows.  If there is only mean density between redshifts $z_i$ and $z_j$, then there are no planes in the sum and hence $\C_{i j} = \beta_{i j } \I$: the connection between the planes is an isotropic tensor that depends on distance ratios. Now suppose there are only void planes between $z_i$ and $z_j$, with $\GammaMat_k \rightarrow \Delta \kappa_k \I$. Since void planes are isotropic, $\C_{i j}$ will still be isotropic. Therefore, let us define a new $\betahat_{i j}$ such that $\C_{i j} = \betahat_{i j} \I$. We point out that $\C_{i k } = \betahat_{i k} \I$ for all $i < k < j$. Using this definition along with the definition of $\C$ in equation \ref{eqn:cmatdef}, we see that $\betahat_{i j}$ must follow the recursion relation
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\columnwidth]{mass_completeness.pdf}
+\caption{\label{fig:mass_complete} Mass completeness as a function of redshift. The blue line shows the average mass per redshift bin, relative to a smooth universe, across the 23 fields for which we have constructed 3-D mass models. The red line shows the best fit to the data using a functional form of $f(z) = e^{-z^a / b}$ with best fit parameters $a = 3.23$ and $b = 0.183$. The red band shows the 16-$84\%$ confidence interval derived from MCMC. We then use this mass completeness function to set the lensing contribution from the smooth background mass density. This allows us to self consistently include voids. Because this is a fit to the average across mass models, individual beams can have higher or lower than the mean density of the universe. The only assumption is that the average of our beams should be approximately the mean density of the universe.
+}
+\end{center}
+\end{figure}
+
+In practice, we parameterize the mass completeness, $f(z)$, with a simple analytic function. Using all 23 fields for which we have constructed mass models, we fit the average mass per redshift bin, relative to a smooth universe, using a function of the form $f(z) = e^{-z^a / b}$ as shown in Figure \ref{fig:mass_complete}. This function is a generalization of a Gaussian that captures the near-total completeness at low redshift (with $f(z=0) = 1$) and smoothly decreases in a similar manner to our observed mass completeness. We find best fit values of $a = 3.23$ and $b = 0.183$. We then run MCMC \citep{emcee} to estimate the uncertainties on the fitted parameters to the mass completeness. The confidence 1-$\sigma$ confidence interval is shown in the red band in Figure \ref{fig:mass_complete}. 
+
+We adopt this mass completeness function for all subsequent analysis. Because we have used the average across all of our beams instead of fitting each beam individually, this allows for individual beams to be over or under dense compared to the mean density of the universe. The only assumption is that the mean of our total sample is approximately the mean density of the universe in each redshift bin. 
+
+
+\subsection{Generating Mock Lensing Observables} \label{sec:observables}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Multi-plane Lensing}
+As we are interested in how mass in the ENV/LOS affects lensing measurements, we must go beyond the standard lens equation that only includes a single lens. Instead we use the multi-plane lens equation (which makes the thin-lens approximation at each redshift of interest; \citealt{PLW}, see \citealt{Petkova14} for an implementation of multi-plane lensing in the GLAMER code, \citealt{Metcalf14}) that traces a light ray from the observer to the source, bending the ray at each redshift plane of interest. The full multi-plane lens equation is given by \citet{PLW}:
+\begin{equation}
+\x_{j} = \x_1 - \sum_{i=1}^{j - 1} \beta_{i\,j} \al_i(\x_i),
+\label{eqn:full_mp}
+\end{equation}
+where $\al_i$ is the deflection in plane $i$ and
+\begin{equation}
+\beta_{i\,j} = \frac{D_{i\,j} D_s}{D_{j}D_{i\,s}}.
+\end{equation}
+The Jacobian matrix for the mapping between the coordinates on the sky and the coordinates in plane $j$ is
+\begin{equation} \label{eq:multi-A}
+  \A_{j} \ = \ \I - \sum_{i=1}^{j-1} \beta_{ij} \frac{\partial\al_i}{\partial\x_i}
+       \frac{\partial\x_i}{\partial\x_1}
+  \ =\ \I - \sum\limits_{i=1}^{j-1} \beta_{ij} \GammaMat_i \A_i\,,
+\end{equation}
+where $\GammaMat_i$ is the ``tidal tensor'' in plane $i$ and is given by
+\begin{equation}
+  \GammaMat_i = \frac{\partial\al_i}{\partial\x_i}
+  = \left[\begin{array}{cc}
+    \kappa_i + \gamma_{\mathrm{c},i} & \gamma_{\mathrm{s},i} \\
+    \gamma_{\mathrm{s},i} & \kappa_i - \gamma_{\mathrm{c},i}
+  \end{array}\right].
+\end{equation}
+We have defined the convergence ($\kappa$) and shear ($\gamma$) components from galaxy $i$ in terms of the lensing potential, $\phi_i$ (defined as $\al_i(\x_i) = \nabla\phi_i(\x_i)$), to be
+\begin{eqnarray}
+  \kappa_i &=& \frac{1}{2} \left( \frac{\partial^2\phi_i}{\partial x_i^2} +
+    \frac{\partial^2\phi_i}{\partial y_i^2} \right) , \\
+  \gamma_{\mathrm{c},i} &=& \frac{1}{2} \left( \frac{\partial^2\phi_i}{\partial x_i^2} -
+    \frac{\partial^2\phi_i}{\partial y_i^2} \right) , \\
+  \gamma_{\mathrm{s},i} &=& \frac{\partial^2\phi_i}{\partial x_i \partial y_i}\ .
+\end{eqnarray}
+The magnification is the inverse of the Jacobian matrix for the source plane, $\mu = \A_s^{-1}$.
+The time delays are given by
+\begin{equation}
+  T = \sum_{i=1}^{s-1}  \frac{1}{2} \tau_{i\,i+1} \left |\x_{i+1} - \x_i \right |^2 - \tau_{i\,s} \phi_i(\x_i),
+\label{eqn:full_t}
+\end{equation}
+where 
+\begin{equation}
+\tau_{ij} =\frac{1+z_i}{c} \frac{D_i D_j}{D_{ij}}
+\end{equation}.
+
+Using these equations to generate lensing observables from discrete mass structures is straight forward, but including the smooth density for voids requires more care, which we will now discuss.
+
+\subsubsection{Multi-plane Lensing with Voids}
+The multi-plane framework is intrinsically build to handle discrete structures, so we now must generalize the multi-plane formalism to include a smooth background density. In our case, we will subtract from the mean density (so that we do not double count the mass in our models) by inserting redshift planes with negative mass density (i.e., negative convergence) in between the planes that contain galaxies. In the limit of a large number of thin planes, the sums over ``void'' planes becomes integrals that we now derive.
+
+Suppose there are only void planes between $z_i$ and $z_j$, with $\GammaMat_k \rightarrow \Delta \kappa_k \I$. We can then define a new $\betahat_{i j}$ that must follow the recursion relation
 \begin{equation}
 \label{eqn:betahatdef}
 \betahat_{i j}  = \beta_{i j} - \sum \limits_{k = i +1}^{j -1} \betahat_{i k} \beta_{k j} \Delta \kappa_k.
 \end{equation}
-Now if plane $j$ is a tidal plane that includes a galaxy, we write the shear tensor as $\GammaMat_j + \Delta \kappa_j \I$. Then,
-\begin{equation}
-\C_{i \, j +1} = \betahat_{i j}  - \betahat_{j \, j+1} \GammaMat_j \C_{i j},
-\end{equation}
-where we have used $\beta_{k \, k+1} = \betahat_{k\, k+1}$.
 
-Next we consider $j +1$ as a void plane and $j + 2$ as a tidal plane and find that
-\begin{eqnarray}
-\hspace*{-0.45cm}\C_{i \, j+2} &=& \betahat_{i \, j+2} - \betahat_{j \, j + 2} \GammaMat_j \C_{i j}\\
-\hspace*{-0.45cm}\C_{i \, j+3} &=& \betahat_{i \, j+3} - \betahat_{j \, j + 3} \GammaMat_j \C_{i j} - \betahat_{j+2 \, j+3} \GammaMat_{j+2} \C_{i \, j+2}.
-\end{eqnarray}
-This generalizes to 
-\begin{equation}
-\C_{i j} = \betahat_{i j} - \sum\limits_{k = i +1}^{j - 1} \betahat_{i k} \GammaMat_k \C_{i k},
-\end{equation}
-where the sum is now only over tidal planes. All of the effects of void planes are now contained in the $\betahat$ factors.
-  
 In the limit of a large number of thin void planes, the sum in equation \ref{eqn:betahatdef} becomes a continuous integral:
 \begin{equation}
 \label{eqn:betahatint}
@@ -292,7 +303,7 @@ This is our desired differential equation, which can be solved using standard nu
 \left. \frac{d \betahat_{i j}}{d X_j} \right|_{j \rightarrow i} = \frac{D_s}{D_i D_{i s}}.
 \end{equation}
 
-We can follow a similar set of arguments for time delays and the $\G_{i j}$ matrices. As before, if there are only void planes between $z_i$ and $z_j$, we can define $\G_{i j} = \tauhat_{i j} \I$. This implies that $\tauhat_{i j}$ should follow the following relation:
+We can follow a similar set of arguments for time delays. As before, if there are only void planes between $z_i$ and $z_j$, $\tauhat_{i j}$ should follow the following relation:
 \begin{equation}
 \tauhat_{i j} = \tau_{i s} - \sum\limits_{k = i + 1}^{j - 1}\betahat_{i k} \tau_{k s} \Delta \kappa_k.
 \end{equation}
@@ -304,38 +315,25 @@ We now take a derivative of $\tauhat_{i j}$ with respect to $X_j$ and obtain
 \begin{equation}
 \frac{d \tauhat_{i j}}{d X_j}  = -\betahat_{i j} \tau_{j s} \frac{d \kappa}{d X_j}. 
 \end{equation}
-This is a first order differential equation, so we only need one boundary condition. The simplest choice is $\tauhat_{i j} \rightarrow \tau_{i s}$ as $j \rightarrow i$ because in that case there is no void correction.  Following a similar argument to what we used for $\C_{i j}$ then yields 
-\begin{equation}
-\G_{i j} = \tauhat_{i j} - \sum\limits_{k = i + 1}^{j -1} \tauhat_{i k} \Gamma_k \C_{i k}.
-\end{equation}
+This is a first order differential equation, so we only need one boundary condition. The simplest choice is $\tauhat_{i j} \rightarrow \tau_{i s}$ as $j \rightarrow i$ because in that case there is no void correction.  
 
-These updates to the $\C_{i j}$ and $\G_{i j}$ matrices provide a straightforward way to account for the lensing effects of a smooth density field.  In principle the density can be arbitrary, but in practice we use it to compensate for the matter that is explicitly included in our mass models.  This correction avoids biases that would be introduced if we simply added all galaxies on top of the mean mass density of the universe.
+Including voids in our multi-plane lensing analysis is now simply replacing the $\beta_{i j}$ with $\betahat_{i j}$ and $\tau_{i j}$ with $\tauhat{i j}$ in equations \ref{eqn:full_mp}, \ref{eq:multi-A}, and \ref{eqn:full_t}.
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=\columnwidth]{mass_completeness.pdf}
-\caption{\label{fig:mass_complete} Mass completeness as a function of redshift. The blue line shows the average mass per redshift bin, relative to a smooth universe, across the 23 fields for which we have constructed 3-D mass models. The red line shows the best fit to the data using a functional form of $f(z) = e^{-z^a / b}$ with best fit parameters $a = 3.23$ and $b = 0.183$. We then use this mass completeness function to set the lensing contribution from the smooth background mass density. This allows to self consistently include voids. Because this is a fit to the average across mass models, individual beams can have higher or lower than the mean density of the universe. The only assumption is that the average of our beams should be approximately the mean density of the universe.
-}
-\end{center}
-\end{figure}
-
-In practice, we parameterize the mass completness, $f(z)$, with a simple analytic function. Using all 23 fields for which we have constructed mass models, we fit the average mass per redshift bin, relative to a smooth universe, using a function of the form $f(z) = e^{-z^a / b}$ as shown in Figure \ref{fig:mass_complete}. This function is a generalization of a Gaussian that captures the near-total completeness at low redshift (with $f(z=0) = 1$) and smoothly decreases in a similar manner to our observed mass completeness. We find best fit values of $a = 3.23$ and $b = 0.183$. We adopt this mass completeness function for all subsequent analysis. Because we have used the average across all of our beams instead of fitting each beam individually, this allows for individual beams to be over or under dense compared to the mean density of the universe. The only assumption is that the mean of our total sample is approximately the mean density of the universe. 
-
-\subsection{Generating Mock Lensing Observables} \label{sec:observables}
-
-Next, we place a lens galaxy into our ENV/LOS mass models, put a variety of sources behind it, and solve the lens equation to generate ``mock'' lenses.\footnote{All of our simulations and modeling use the \emph{lensmodel} package \citep{Keeton01}.}  We treat the main lens galaxy using a ellipsoidal power law model given by
+\subsubsection{Adding the Lens System to our Beams}
+The final ingredient for our for generating lens observables is the lens system itself. We treat the lensing potential of the main lens galaxy using a ellipsoidal power law model given by
 \begin{equation}
 \label{eqn:powerlaw}
 \kappa = \frac{b^{2-\eta}}{2 \xi^{2-\eta}}
 \quad\mbox{where}\quad
 \xi^2 = x^2 + \frac{y^2}{(1-e)^2}
 \end{equation}
+
 Here $\xi$ is the elliptical radius and $e$ is the ellipticity.  The power law index $\eta$ is chosen so the enclosed mass scales as $M(r) \propto r^\eta$.
 The Einstein radius for this model is $R_E = b \eta^{\eta - 2}$. Our initial models use $\eta = 1$ which corresponds to a singular isothermal ellipsoid.
 
 We treat the azimuthal angle of the main lens galaxy and the position of the source as nuisance parameters to marginalize.  Specifically, we draw random values for the lens galaxy orientation from a uniform distribution.  We choose source positions from a magnification weighted distribution to approximate the magnification bias that is present in real observations \citep[see][]{Keeton04}. Overall, we generate a sample of 300 quad and 300 double mock image configurations for each mass model.
 
-We use the full recursive lens equation (eq.\ \ref{eqn:full_mp} with no approximations) to ray trace through our mass models and generate mock lensing observerables: image configuration, image positions, time delays, and flux ratios. We imagine observing these lenses with fiducial measurement uncertainties of 3 milliarcseconds for the positions of the lensed images and the main galaxy, $5\%$ for the fluxes, and 1 day for the time delays. These values are typical of observations with instruments such as \emph{HST} and monitoring campaigns such as COSMOGRAIL \citep{Eigenbrod05}. We do not explicitly add scatter to the mock data; preliminary tests indicate that such measurement noise introduces a ``floor'' in the $\chi^2$ values and the scatter in recovered lens parameters but does not qualitatively change our results.
+We use the full multi-plane lens equation (eq.\ \ref{eqn:full_mp}) to ray trace through our mass models and generate mock lensing observables: image configuration, image positions, time delays, and flux ratios (similar to \citealt{Petkova14}). We imagine observing these lenses with fiducial measurement uncertainties of 3 milliarcseconds for the positions of the lensed images and the main galaxy, $5\%$ for the fluxes, and 1 day for the time delays. These values are typical of observations with instruments such as \emph{HST} and monitoring campaigns such as COSMOGRAIL \citep{Eigenbrod05}. We do not explicitly add observational scatter to the mock data; preliminary tests indicate that such measurement noise introduces a ``floor'' in the $\chi^2$ values and the scatter in recovered lens parameters but does not qualitatively change our results.
 
 Two-image lens systems have the following observables:
 \begin{itemize}
@@ -356,17 +354,13 @@ By contrast, four-image systems have:
 giving a total of 17 constraints.
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fitting Lens Models \label{sec:lensmodels}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We can then fit the simulated observables as we would for real lens systems. We consider three types of models that treat the ENV/LOS in different ways to see if we can recover the true, input lens galaxy parameters and the Hubble constant. We consider the following models:
-(1) The ``Lens-Only'' model ignores ENV/LOS effects altogether.
-(2) The ``Lens+Shear'' model attempts to account for ENV/LOS effects by fitting an external shear in the main lens plane \citep[e.g.,][]{Suyu13}.
-(3) The ``3-D Lens'' model uses our multi-plane framework developed in M14. However, most (or all) of the ENV/LOS galaxies are treated using the tidal approximation. This allows us to disentangle non-linear effects, which are accounted for in our 3-D Lens models, and higher order terms which are not.
+We can then fit the simulated observables as we would for real lens systems. We consider models that treat the ENV/LOS in progressivly more realistic ways to see if we can recover the true, input lens galaxy parameters and the Hubble constant. 
 
-The models all have the following 10 free parameters:
+The models all have the following 10 free parameters for the main lens system:
 \begin{itemize}
 \item Source position ($x,y$)
 \item Source flux
@@ -376,21 +370,106 @@ The models all have the following 10 free parameters:
 \item Lens galaxy ellipticity and orientation ($e,\theta_e$)
 \item Lens galaxy power law index ($\eta$)
 \end{itemize}
-The Lens+Shear model has two additional free parameters that characterize the external shear; we use the pseudo-Cartesian components of the shear, $\gamma_c = \gamma \cos 2\theta_\gamma$ and $\gamma_s = \gamma \sin 2\theta_\gamma$.
 
-Given the numbers of parameters and constraints, quad lenses are well constrained with 7 degrees of freedom (dof) for the Lens-Only and 3-D Lens models and 5 dof for the Lens+Shear model. Double lenses are, however, underconstrained with $-1$ dof for the Lens-Only and the 3-D Lens models and $-3$ dof for the Lens+Shear model.
 
-Because the Lens+Shear model has a different number of dof, care must be taken when comparing the results to the other models. We scale the $\chi^2$ value by the 95\% confidence limit for the number of dof to ensure a fair comparison across model types.
-
-In some cases it may be reasonable to put priors on the lens galaxy ellipticity and orientation based on the light profile \citep[e.g.,][]{Bolton08}, but in lensing there is not always a strong relation between the light and mass \citep[][and references therein]{Bruderer15}. Therefore we do not place any priors on the lens galaxy parameters.  We do assume a weak Gaussian prior on the Hubble constant, $h = 0.71 \pm 0.3$, which ensures that models are reasonable but otherwise has little effect on the results for quad lenses.  The prior plays a stronger role in double lenses since they are underconstrained.  Overall, the results from double lenses are qualitatively similar to those from quad lenses but considerably broader.  For the remainder of the discussion we focus on quad lenses because they are better constrained.
-
+In some cases it may be reasonable to put priors on the lens galaxy ellipticity and orientation based on the light profile \citep[e.g.,][]{Bolton08}, but in lensing there is not always a strong relation between the light and mass \citep[][and references therein]{Bruderer15}. Therefore we do not place any priors on the lens galaxy parameters.  We do assume a weak Gaussian prior on the Hubble constant, $h = 0.71 \pm 0.3$, which ensures that models are reasonable but otherwise has little effect on the results for quad lenses.  The prior plays a stronger role in double lenses since they are under constrained (see below).  Overall, the results from double lenses are qualitatively similar to those from quad lenses but considerably broader. For the remainder of the discussion we focus on quad lenses because they are better constrained.
 
 In all cases, the model parameters are varied to find the best fit and allowed range.  We seek to understand how the assumptions and approximations in the various models cause parameters to shift away from their true values. 
-The Lens-Only models ignore the ENV/LOS entirely, so they serve as control test: the best fit values for the lens galaxy parameters and the Hubble constant move away from the truth in an attempt to account for the LOS/ENV effects allowing us to characterize the overall importance of ENV/LOS effects. The Lens+Shear models have two extra free parameters, and we aim to test whether the shear can account for ENV/LOS effects well enough to provide robust constraints on the Hubble constant. Finally, the 3-D Lens models are based on the same mass models that were used to generate the mock lensing observables. The analysis is not circular, however, because the fits treat most or all of the ENV/LOS galaxies using the tidal approximation (whereas the mock data are generated with the full multi-plane lens equation). This approach allows us to isolate the effects of higher order terms beyond the shear and convergence. Also, even with perfect knowlege of the ENV/LOS, there may be degeneracies between model parameters in the 3-D Lens models that we will explore below. 
+
+For the recovered lens quantities, we use Markov Chain Monte Carlo (MCMC) methods to calculate the full posterior probability distribution. When presenting marginalized results for a given lens parameter, we show the median value of the fitted parameters and estimate the scatter by measuring half of the difference between the $16^{th}$ and $84^{th}$ percentiles. When plotting results, we show fractional changes in the fitted parameters to emphasize the variation.
+
+The details of the individual models we consider here are in the following subsections.
+
+\subsubsection{Lens-Only}
+The ``Lens-Only'' model ignores ENV/LOS effects altogether and is therefore the simplest model. This model fits the following form of the lens equation:
+\begin{equation}
+\x_s = \x_1 - \tilde{\al_\ell}(\x_1),
+\end{equation}
+where the tilde indicates that the parameters in the lens potential are allowed to vary.
+Given the numbers of parameters and constraints, quad lenses are well constrained with 7 degrees of freedom (dof). Double lenses are, however, under constrained with $-1$ dof.
+
+The Lens-Only model ignores the ENV/LOS entirely, so it serves as a control test: the best fit values for the lens galaxy parameters and the Hubble constant move away from the truth in an attempt to account for the LOS/ENV effects allowing us to characterize the overall importance of ENV/LOS effects.
+
+\subsubsection{Lens+Shear}
+The ``Lens+Shear'' model attempts to account for ENV/LOS effects by fitting an external shear in the main lens plane \citep[e.g.,][]{Suyu13}. The Lens+Shear model has two additional free parameters that characterize the external shear; we use the pseudo-Cartesian components of the shear, $\gamma_c = \gamma \cos 2\theta_\gamma$ and $\gamma_s = \gamma \sin 2\theta_\gamma$.
+The lens equation for the Lens+Shear models takes the following form:
+\begin{equation}
+\x_s = (\I - \tilde{\GammaMat}) \x_1 - \tilde{\al_\ell}(\x_1),
+\end{equation}
+where the tilde again indicates what is allowed to vary in the fits; in this case the main lens galaxy potential and the external shear.
+For the Lens+Shear models, quad lenses have 5 dof and double lenses are underconstrained with $-3$ dof.
+Because the Lens+Shear model has a different number of dof, care must be taken when comparing the results to the other models. We scale the $\chi^2$ value by the 95\% confidence limit for the number of dof to ensure a fair comparison across model types.
+
+The Lens+Shear model ignores any 3-D structure of the LOS. Comparing the Lens+Shear model to more realistic (and therefore complex) models allows to quantify the importance of redshift effects in modeling realistic lens systems.
 
 
+\subsubsection{Lens+3-D Tides}
+The ``Lens+3-D Tides" model uses our multi-plane framework developed in M14 (see also \citealt{Schneider97}). This includes the non-linear effects due to 3-D LOS structure, but ignores higer order terms beyond the tidal approximation allowing us to test the tidal approximation.
 
-For the recovered lens quantities, we use Markov Chain Monte Carlo methods to calculate the full posterior probability distribution. When presenting marginalized results for a given lens parameter, we show the median value of the fitted parameters and estimate the scatter by measuring half of the difference between the $16^{th}$ and $84^{th}$ percentiles. When plotting results, we show fractional changes in the fitted parameters to emphasize the variation.
+The Lens+3-D Tides models replace the traditional ``Tidal Tensor'' with ``3-D Tidal Tensors''. The expressions for the lens equation, magnification tensor, and time delay are as follows:
+\begin{eqnarray}
+\x_{s} &=& \B_s \x_1 - \C_{\ell s} \tilde{\al}_\ell(\B_\ell \x_1),\label{eqn:lenseqn_3dtide}\\
+\A_{s} &=& \B_s - \C_{\ell s} \frac{\partial \tilde{\al}_\ell}{\partial \x_i} \A_\ell,\\
+T &=& \frac{1}{2} \x_s \cdot \F_s \x_1 + \frac{1}{2}\tau_{\ell s} \B_\ell \x_1 \cdot \tilde{\al}_\ell(\B_\ell \x_1) \nonumber \\
+&&-\frac{1}{2}\x_s \cdot \G_{\ell s}\tilde{\al}_\ell(\B_\ell \x_1) -\tau_{\ell s}\phi_\ell(\B_\ell \x_1),
+\end{eqnarray}
+where $\ell$ denotes the redshift plane of the main lens galaxy. The tildes denote that we vary the main lens potential, using the same notation as above.
+All of the tidal effects are characterized by the following ``3-D Tidal Tensors'':
+\begin{eqnarray}
+\B_j &=& \I - \sum\limits_{i=1,i \neq \ell}^{j-1}\betahat_{i j}\GammaMat_i \B_i, \\
+\C_{\ell j} &=& \betahat_{\ell j} \I - \sum\limits_{i=\ell+1, i\neq \ell}^{j-1} \betahat_{\ell i}\GammaMat_i\C_{\ell i}, \\
+\F_j &\equiv& 
+%\tau_{j-1} \B_{j}-\tau_{j-1} \B_{j-1} \ =\ 
+  - \sum\limits_{i=1,i\neq \ell}^{j-1} \tauhat_{is}\GammaMat_i\B_i, \\
+\G_{\ell j}&\equiv& 
+%\tau_{j-1} \C_{\ell j}-\tau_{j-1} \C_{\ell \,j-1} \nonumber \\
+% &=&\ 
+ \tauhat_{\ell s}\I- \sum\limits_{i=\ell+1,i \neq \ell}^{j-1} \tauhat_{is}\GammaMat_i\C_{\ell i}.
+\end{eqnarray}
+Like the Lens-Only models, we only allow the main lens galaxy parameters to vary giving 7 dof for quad lenses $-1$ dof for doubles.
+
+These ``3-D Tidal Tensors'' are not allowed to vary in this analysis (though in principle they could be) so they can be computed once at the start of any lens modeling analysis and stored for repeated use yielding a large increase in computational efficiency. We also note that the 3-D Tidal Tensors depend on ratios of cosmic distances, so these matrices are only constant if the cosmological parameters besides $H_0$ are fixed. When other cosmological parameters are allowed to vary, e.g., constraining $\Omega_{\Lambda}$, it is necessary recompute these matrices. One possibility to overcome this computational challenge is to compute a grid of 3-D Tidal Tensors and interpolate to a given set of cosmological parameters.
+
+We have written the above expressions for the ``3-D Tidal Tensors'' in terms of the $\betahat$ and $\tauhat$ parameters that we derived above. This is a generalization from M14 to include the effects of voids in these tidal tensors (this can be shown using similar arguments as in Section \ref{sec:voids}).
+
+The lens equation in eq. \ref{eqn:lenseqn_3dtide} looks similar to the lens equation in the Lens+Shear model, but with two key differences. The first is that 3-D redshift effects are explict in the $\B_s$ tensor, instead of defining an effective shear in the lens plane. The second, more important, difference is that the $\B_\ell$ tensor appears inside the argument of the deflection of the main galaxy. This leads to non-linear effects that cannot be generally rewritten in terms of an effective shear. By comparing the results from Lens+Shear and Lens+3-D Tides models, we can explicity distinguish these non-linear effects and assess their importance for cosmology. 
+
+\subsubsection{3-D Lens}
+The final set of models we consider are the most general. These models include the most important galaxies (which we will quantify in Section \ref{sec:Individual}) including higher order terms (not using the tidal approximation) while the rest of the ENV/LOS galaxies are included in the 3-D Tidal Tensors similar to the Lens+3-D~Tides model. We have called these the ``3-D Lens'' models. 
+
+ Our lens models typically contain hundreds of components, but we expect that many of the perturbing galaxies do not significantly contribute to the lens equation beyond their shear and convergence.\footnote{Sections \ref{sec:Individual} and \ref{sec:fitting} discuss the objective criterion we use to determine which perturbers can be treated with the tidal approximation.}  In our previous paper (M14; see \citealt{Schneider14} for an alternative derivation), we presented a hybrid framework for multi-plane lensing that incorporates all of the tidal planes (weak lenses) into the ``3-D Tidal Tensors'' so the sum in the multi-plane lens equation (eq. \ref{eqn:full_mp}) includes only ``main'' lens planes (strong lenses, i.e., those not treated with the tidal approximation). Our framework recovers the full multi-plane lens equation when all of the redshift planes are treated as ``main'' planes. Even when it uses the tidal approximation, our framework still includes non-linear effects associated with having mass at different redshifts. 
+ 
+ The primary difference in the lens equation between the Lens+3-D~Tides and the full 3-D lens model is that the $\ell$ becomes a free index that we use to sum over main planes. 
+ 
+ If we take the observer to be in plane $i = 0$, we can write $\beta_{0\,j} = \betahat_{0 \, j} =  1$ and $\tau_{0\,j} = \tauhat_{0\,j} = 0$. We then realize that the $\B$ and $\C$ matrices are related, as are the $\F$ and $\G$ matrices:
+\begin{equation}\label{eqn:BC-FG}
+\B_j = \C_{0 \, j}
+\qquad\mbox{and}\qquad
+\F_{j} = \G_{0 \, j}.
+\end{equation}
+
+For an arbitrary mix of strong lenses (``main planes'') and weak lenses (whose effects are captured in the 3-D Tidal Tensors), the 3-D Tidal Tensors become
+\begin{eqnarray}
+\C_{\ell j} &=& \betahat_{\ell j} \I - \sum\limits_{i=\ell+1, i\not\in\{\ell_\mu\}}^{j-1} \betahat_{\ell i}\GammaMat_i\C_{\ell i},\\
+\G_{\ell j}&\equiv& 
+%\tau_{j-1} \C_{\ell j}-\tau_{j-1} \C_{\ell \,j-1} \nonumber \\
+% &=&\ 
+ \tauhat_{\ell s}\I- \sum\limits_{i=\ell+1,i\not\in\{\ell_\mu\}}^{j-1} \tauhat_{is}\GammaMat_i\C_{\ell i}.
+\end{eqnarray}
+
+ The generalized expressions for the lens equation, magnification tensor, and time delay are as follows:
+\begin{eqnarray}
+\x_{j} &=& \C_{0\, j} \x_1 - \sum_{\ell \in \{\ell_\mu<j\}} \C_{\ell j} \al_\ell(\x_\ell),\label{eqn:lenseqn}\\
+\A_{j} &=& \C_{0 \, j} - \sum_{\ell \in \{\ell_\mu<j\}} \C_{\ell j} \frac{\partial \al_\ell}{\partial \x_i} \A_\ell,\\
+T &=& \frac{1}{2} \x_s \cdot \G_{0 \,s} \x \nonumber \\
+&&+ \sum\limits_{\ell \in \{\ell_\mu\}}\left[\frac{1}{2}\tau_{\ell s} \x_\ell \cdot \al_\ell -\frac{1}{2}\x_s \cdot \G_{\ell s}\al_\ell -\tau_{\ell s}\phi_\ell \right],
+\end{eqnarray}
+where the sums run over ``main'' planes, $\al_\ell$ is the deflection in main plane $\ell$. In these models, we only allow the deflection of the main lens galaxy to vary so we do not explicity include tildes in the equations above. Like the Lens-Only and Lens+3-D Tides models, quad lenses have 7 dof and double lenses are under constrained with $-1$ dof. 
+
+Note in eq.\ \ref{eqn:lenseqn} that each main plane needs to be evaluated using the positions $\x_\ell$, which are not generally the same as the positions $\x_1$ on the sky and must be computed with the lens equation. This distinction gives rise to non-linearities that cannot be mimicked by an effective shear. Our framework is therefore more accurate than fitting a simple shear in the lens plane, but it is also more efficient than the full multi-plane lens equation because the recursive sums include only main planes.  It fills the gap between using the full multi-plane lens equation (which can be computationally expensive) and treating everything as a simple external shear (which omits higher-order effects that can be significant for objects projected near the lens and does not include non-linear redshift effects).
+
+ By comparing the results from the Lens+3-D~Tides models to the results from the full 3-D Lens models, we isolate the effects from higher order terms from the non-linear redshift effects. Also, as we include more and more galaxies exactly, without using the tidal approximation, the 3-D lens model becomes identical to the lens equation that was used to generate the mock lensing observables. This allows us to probe the fundemental limitations of recovering lens galaxy parameters and cosmological information from lens modelling analyses.  
+
 
  We now have all of the machinery in place to study the ENV/LOS contribution to lensing. We now turn to the results of our simulations.
 
@@ -399,7 +478,7 @@ For the recovered lens quantities, we use Markov Chain Monte Carlo methods to ca
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To understand the contribution of the ENV/LOS to lensing, we break the problem into four pieces. We first examine the perturbations due to individual ENV/LOS galaxies to understand what combination of mass, projected offset, and redshift determine a perturber’s importance  (Section \ref{sec:Individual}). We then apply the lessons to realistic mass models that contain hundreds of ENV/LOS galaxies (Section \ref{sec:Environments}). After that, we fit the mock lensing observables generated with our realistic mass models to determine how well different types of models can recovered the input galaxy parameters and cosmology (Section \ref{sec:fitting}). Finally, we place different lens systems into the ENV/LOS mass models to understand how the mass and ellipticity of the lens galaxy and the position of the source affect a lens's sensitivity to ENV/LOS effects when inferring the Hubble constant (Section \ref{sec:ImageConfigs}). 
+To understand the contribution of the ENV/LOS to lensing, we break the problem into four pieces. We first examine the perturbations due to individual ENV/LOS galaxies to understand what combination of mass, projected offset, and redshift determine a perturber’s importance  (Section \ref{sec:Individual}). We then apply the lessons to realistic mass models that contain hundreds of ENV/LOS galaxies (Section \ref{sec:Environments}). After that, we fit the mock lensing observables generated with our realistic mass models to determine how well different types of models can recover the input galaxy parameters and cosmology (Section \ref{sec:fitting}). Finally, we place different lens systems into the ENV/LOS mass models to understand how the mass and ellipticity of the lens galaxy and the position of the source affect a lens's sensitivity to ENV/LOS effects when inferring the Hubble constant (Section \ref{sec:ImageConfigs}). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Which Individual Environment/LOS Galaxies are the Most Important?}
@@ -413,17 +492,17 @@ To understand the contribution of the ENV/LOS to lensing, we break the problem i
 \end{center}
 \end{figure}
 
-While there hundreds of galaxies in our beams, they are not equally important for lensing.  Conceptually, we want to understand what properties control an individual perturber's influence on the lensed images. When characterizing an individual perturber, we test the effects of mass, projected offset from the main lens galaxy, and redshift. We initially control for redshift, placing the perturbing galaxy at the same redshift as the main lens but varying the mass and projected offset (Section \ref{sec:toylos}). We then move the perturbing galaxy in redshift (Section \ref{sec:frontback}). Based on the results from M14, we expect there to be a difference between perturbers in the foreground and background of the main lens due to non-linear effects that we aim to quantify. We use both equations and simulations to identify a quantity, based on the flexion produced by a perturbing galaxy, that characterizes how much a given galaxy affects the recovered value of the Hubble constant.
+While there are hundreds of galaxies in our beams, they are not equally important for lensing.  Conceptually, we want to understand what properties control an individual perturber's influence on the lensed images. When characterizing an individual perturber, we test the effects of mass, projected offset from the main lens galaxy, and redshift. We initially control for redshift, placing the perturbing galaxy at the same redshift as the main lens but varying the mass and projected offset (Section \ref{sec:toylos}). We then move the perturbing galaxy in redshift (Section \ref{sec:frontback}). Based on the results from M14, we expect there to be a difference between perturbers in the foreground and background of the main lens due to non-linear effects that we aim to quantify. We use both equations and simulations to identify a quantity, based on the flexion produced by a perturbing galaxy, that characterizes how much a given galaxy affects the recovered value of the Hubble constant.
 
 \subsubsection{Massive Galaxies Projected Near the Lens are More Important \label{sec:toylos}}
 
-We begin our characterization of individual perturbing galaxies with the simplest case: we examine one main lens galaxy and one perturbing galaxy in the same plane (removing any redshift effects). We first derive analytic expectations for how an individual perturbing galaxy affects the lens potential, and then show that the deviations in the recovered Hubble constant scale in the same way as the lens potential perturbations.
+We begin our characterization of individual perturbing galaxies with the simplest case: we examine one main lens galaxy and one perturbing galaxy in the same plane (removing any redshift effects). We first derive analytic expectations for how an individual perturbing galaxy affects the lens potential, and then show that the deviations in the recovered Hubble constant scale in the same way as the lens potential perturbations. To derive our expectations for the behavior of our models, we some simplifying assumptions (e.g., a point mass perturber), but we note that we only make these assumptions when deriving our criterion to characterize the individual contribution of a perturbing galaxy along the LOS. When fitting our realistic lens beams, we use truncated SIS potentials to model the galaxies in the ENV and along the LOS (see Section \ref{sec:massmodels}).
 
 Consider a single main lens galaxy with deflection, $\al_{g}$, and a single perturbing galaxy with deflection, $\al_p$. Both are at the same redshift in this case. It is useful to define the lensing potential as
 \begin{equation}
 \al \equiv \nabla \phi.
 \end{equation}
-If the perturbing galaxy does not overlap the lensed images, its gravity is the same as a point mass so we can write the lens potential as
+If the perturbing galaxy does not overlap the lensed images, its gravitational effect is the same as a point mass so we can write the lens potential as
 \begin{equation}
 \phi_p = R_p^2 \ln \left| \x - \vec{r} \right| 
 \end{equation}
@@ -459,7 +538,7 @@ In the expansions, the zeroth order terms correspond to shifts in the zeropoint 
 
 To quantify the environmental effects, we run simulations with an SIE main lens galaxy and a point mass perturber.  We choose the Einstein radius of the main lens to be $R_E = 1.0''$, and we place the lens and perturber at redshift $z_{\rm{lens}} = z_p = 0.3$ in front of a source at redshift $z_{\rm{src}} = 2.0$.  We consider three decades of perturber mass.  Figure \ref{fig:toyr3} shows the results in terms of scatter in the recovered values of the Hubble constant $h$ and the ellipticity $e$.
 
-The parameter scatter increases as the perturber gets closer to the main galaxy and higher order terms become more important.  The scalings follow power laws that are consistent with the deviations in the lens potential. Our models omit third-order terms and higher, so we expect the scatter to scale as $r^{-3}$. The scatter in the ellipticity and the Hubble are both proportional to the mass of the perturbing galaxy. 
+The parameter scatter increases as the perturber gets closer to the main galaxy and higher order terms become more important.  The scalings follow power laws that are consistent with the deviations in the lens potential. Our models omit third-order terms and higher, so we expect the scatter to scale as $r^{-3}$. The scatter in the ellipticity and the Hubble constant are both proportional to the mass of the perturbing galaxy. 
 
 Therefore, the scatter in the recovered Hubble constant created by an individual perturbing galaxy is proportional to $M / r^3$ (note that $ M \propto R_p^2$ for a point mass), which is the same scaling as the deviations in the lens potential. These results quantify our intuition that massive galaxies near the main lens are important for lensing. 
 
@@ -485,12 +564,12 @@ Combining these equations, recalling that $\beta_{i\,s} \equiv 1$, and setting $
 \end{equation}
 In the following discussion it is useful to recall that $\beta$ varies monotonically with redshift, ranging from $\beta = 0$ when $z_p = z_{\rm{lens}}$ to $\beta = 1$ when the perturber redshift reaches either $z_p = 0$ (for a foreground perturber) or $z_p = z_{\rm{src}}$ (for a background perturber).
 
-To make further progress, we need to distinguish situations when the perturber is in front of or behind the main lens galaxy. In M14, we showed that background perturbers produce an additional shear while foreground perturbers produce non-linear effects.
+To make further progress, we need to distinguish situations when the perturber is in front of or behind the main lens galaxy. In M14, we showed that background perturbers only produce an additional shear while foreground perturbers produce non-linear effects.
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=\columnwidth]{toyh.pdf}
-\caption{\label{fig:toyhd3x} Scatter in the Hubble constant, $h$, recovered from 3-D Lens models for perturbers at different projected offsets and redshifts.  The main lens has a redshift of $z_{\rm{lens}} = 0.3$ which is marked with a dotted line, and the perturbing galaxy has a mass of $10^{12}\,M_\odot$.  The dashed line shows a contour of constant flexion shift, $\Delta_3 x$, from equations \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x} (picking a different value of $\Delta_3 x$ would simply rescale the contour). The effects due to a perturber in the background are downweighted (see equation \ref{eqn:backgroundd3x}), and therefore the perturber needs to be closer in projection to have the same effect than as if it were at the same redshift as the lens. In the foreground, the curve flares out, implying that foreground perturbers can be farther away in projection to have the same effect if they were at the lens redshift. This occurs because the Einstein radius of a point mass increases as redshift decreases, yielding stronger lensing effects. The curve matches the shape of the color contours, indicating that our theoretical expression from the lens potential captures the redshift dependence of LOS effects in the recovered parameters, like the Hubble constant.  Thus, we can use the flexion shift to compare effects of LOS galaxies even if they are at different redshifts.
+\caption{\label{fig:toyhd3x} Scatter in the Hubble constant, $h$, for perturbers at different projected offsets and redshifts.  The main lens has a redshift of $z_{\rm{lens}} = 0.3$ which is marked with a dotted line, and the perturbing galaxy has a mass of $10^{12}\,M_\odot$.  The dashed line shows a contour of constant flexion shift, $\Delta_3 x$, from equations \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x} (picking a different value of $\Delta_3 x$ would simply rescale the contour). The effects due to a perturber in the background are downweighted (see equation \ref{eqn:backgroundd3x}), and therefore the perturber needs to be closer in projection to have the same effect than as if it were at the same redshift as the lens. In the foreground, the curve flares out, implying that foreground perturbers can be farther away in projection to have the same effect if they were at the lens redshift. This occurs because the Einstein radius of a point mass increases as redshift decreases, yielding stronger lensing effects. The curve matches the shape of the color contours, indicating that our theoretical expression from the lens potential captures the redshift dependence of LOS effects in the recovered parameters, like the Hubble constant.  Thus, we can use the flexion shift to compare effects of LOS galaxies even if they are at different redshifts.
 }
 \end{center}
 \end{figure}
@@ -524,7 +603,7 @@ then we can rewrite equation \ref{eqn:background} as
 \begin{equation}
 \vec{u}_{\rm eff} = (\I - \GammaMat_{\rm eff}) \x_1 - \al_g(\x_1),
 \end{equation}
-which is equivalent to the single plane lens equation with an external shear in the lens plane \citep[see also][]{Schneider97}. We are allowed to rescale the source plane because the position of the source is unobservable and we typically only measure the ratio of the fluxes of different images, which is insensitive to the absolute intrinsic luminosity of the source.\footnote{The freedom to rescale the source plane vanishes if the intrinsic luminosity of the source is known.  Thus, lensed standard candles, such as type Ia supernovae \citep{Kelly15, Patel14, Kolatt98}, offer a novel way to break the mass sheet degeneracy.}
+which is equivalent to the single plane lens equation with an external shear in the lens plane \citep[see also][]{Schneider97}. We are allowed to rescale the source plane because the position of the source is unobservable and we typically only measure the ratio of the fluxes of different images, which is insensitive to the absolute intrinsic luminosity of the source.\footnote{The freedom to rescale the source plane vanishes if the intrinsic luminosity of the source is known.  Thus, lensed standard candles, such as type Ia supernovae \citep{Kelly16, Rodney16, Kelly15, Patel14, Kolatt98}, offer a novel way to break the mass sheet degeneracy.}
 
 In the tidal approximation, we again expect errors in the recovered lens parameters to be associated with the largest terms in the lens potential that have been neglected: the third order flexion terms.  We therefore use the terms involving $\sF$ to quantify the lens potential perturbations.\footnote{Recall from Section \ref{sec:toylos} that the flexion terms scale with mass and projected offset as $M / r^3$; now we generalize now to include redshift.}  We approximate the main lens galaxy as a singular isothermal sphere (SIS) with deflection
 \begin{equation}
@@ -550,16 +629,14 @@ Now, if we define the perturber to be colinear with the image position ($\theta 
 \Delta_3 x = \frac{R_E^2 R_p^2}{r^3} (1 - \beta)^2. 
 \label{eqn:backgroundd3x}
 \end{equation}
-We call this quantity, $\Delta_3 x$, the ``flexion shift'' because it characterizes the perturbations to image positions caused by flexion from a perturber. This quantity has units of arcseconds and it gives us a way to quantify and compare the ENV/LOS contributions from different perturing galaxies.
+We call this quantity, $\Delta_3 x$, the ``flexion shift'' because it characterizes the perturbations to the image positions caused by the third-order (``flexion'') terms from a perturber. This quantity has units of arcseconds and it gives us a way to quantify and compare the ENV/LOS contributions from different perturbing galaxies.
 
-We note that in this derivation, we have used the expression for $\sF$ for a point mass, which is reasonable when the perturber is projected far from the images.  Strictly speaking, $r$ here is the unlensed distance in the redshift plane of the perturber. To convert to offset as observed on the sky $r'$, we use the lens equation to yield $r' = r - \beta R_E$. As long as the perturbing galaxy is many Einstein radii away from the lens, we can put $r' \approx r$.  (If that were not the case, the perturber would need to be treated as a main plane.)
+We note that in this derivation, we have used the expression for $\sF$ for a point mass, which is reasonable when the perturber is projected far from the images.  Strictly speaking, $r$ here is the unlensed distance in the redshift plane of the perturber. To convert to offset as observed on the sky $r'$, we use the lens equation to yield $r' = r - \beta R_E$. As long as the perturbing galaxy is many Einstein radii away from the lens, we can put $r' \approx r$.  (If that were not the case, the perturber would need to be treated as a main plane anyway.)
 
 \medskip
 \centerline{\emph{Lens Potential Perturbations}}
 \centerline{\emph{from a Foreground Galaxy}}
 \medskip
-
-
 
 We now turn our attention to a perturber in the foreground of the lens. In this case $\al_1 = \al_p$ and $\al_2 = \al_g$, so the lens equation has the form
 \begin{equation}
@@ -604,9 +681,9 @@ This equation is similar to equation \ref{eqn:backgroundd3x}, but without any $\
 \centerline{\emph{Tracks Lens Potential Perturbations}}
 \medskip
 
-We now use simulations to test whether our expression for the deviation in the lens potential, the flexion shift $\Delta_3 x$ (eqs.\ \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x}), provides a useful way to characterize the importance of ENV/LOS perturbers and their contribution to the recovered lens parameters and Hubble constant. For these simulations, we fix the perturber mass to be $10^{12}\,M_\odot$ but vary its projected offset and redshift. In these simulations, we treat the perturber as a point mass, which is not a valid assumption when the projected offset or redshift is small, but is reasonable in the regime where we anticipate using the tidal approximation.  Figure \ref{fig:toyhd3x} shows the scatter in the recovered value of the Hubble constant (the median value is not shown because it matches the input value; there is no bias).  Generally speaking, the scatter increases as the offset decreases and higher order terms become more significant. In the background, the perturber's effects become weaker as the redshift offset increases because of the $\beta$ factors in equation \ref{eqn:backgroundd3x}; while in the foreground, the perturber's effects become stronger as $z \to 0$ because its angular Einstein radius increases.  Both of these scalings are well described by our functional form for $\Delta_3 x$, which indicates that we have successfully defined a quantitiy to characterize the contribution of perturbing galaxies. 
+We now use simulations to test whether our expression for the deviation in the lens potential, the flexion shift, $\Delta_3 x$ (eqs.\ \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x}), provides a useful way to characterize the importance of ENV/LOS perturbers and their contribution to the recovered lens parameters and Hubble constant. For these simulations, we fix the perturber mass to be $10^{12}\,M_\odot$ but vary its projected offset and redshift. In these simulations, we treat the perturber as a point mass, which is not a valid assumption when the projected offset or redshift is small, but is reasonable in the regime where we anticipate using the tidal approximation.  Figure \ref{fig:toyhd3x} shows the scatter in the recovered value of the Hubble constant (the median value is not shown because it matches the input value; there is no bias).  Generally speaking, the scatter increases as the offset decreases and higher order terms become more significant. In the background, the perturber's effects become weaker as the redshift offset increases because of the $\beta$ factors in equation \ref{eqn:backgroundd3x}; while in the foreground, the perturber's effects become stronger as $z \to 0$ because its angular Einstein radius increases.  Both of these scalings are well described by our functional form for $\Delta_3 x$, which indicates that we have successfully defined a quantity to characterize the contribution of perturbing galaxies. 
 
-Many lens systems have significant contributions from in their local environment, (e.g., HE0435$-$1223 has a neighbor, \citealt{Kochanek06}; while MG0414+0534 \citep{Tonry99}, RXJ1131$-$1231 \citep[hereafter RXJ1131][]{Sluse03}, and B2114+022 \citep{King99} all have satellites that are presumably close enough to matter), and while some models do treat nearby perturbers exactly \citep[e.g.,][]{Kochanek06, Fadely12}, typically the decision whether to include a neighbor galaxy in a model is \textit{ad hoc}. The flexion shift, $\Delta_3 x$, provides a quanitative criterion to compare the importance of LOS galaxies even if they are at different redshifts. Any given perturber can be treated with the tidal approximation if its $\Delta_3 x$ value is small, but it must be treated explicitly if its $\Delta_3 x$ value is large.
+Many lens systems have significant contributions from in their local environment, (e.g., HE0435$-$1223 has a neighbor, \citealt{Kochanek06}; while MG0414+0534 \citep{Tonry99}, RXJ1131$-$1231 \citep[hereafter RXJ1131][]{Sluse03}, and B2114+022 \citep{King99} all have satellites that are presumably close enough to matter), and while some models do treat nearby perturbers exactly \citep[e.g.,][]{Kochanek06, Fadely12}, typically the decision whether to include a neighbor galaxy in a model is \textit{ad hoc}. The flexion shift, $\Delta_3 x$, provides a quantitative criterion to compare the importance of LOS galaxies even if they are at different redshifts. Any given perturber can be treated with the tidal approximation if its $\Delta_3 x$ value is small, but it must be treated explicitly if its $\Delta_3 x$ value is large (see \citealt{Sluse16} for an application of the flexion shift to observed LOS galaxy catalogs).
 
 \subsection{Characterizing Realistic Beams\label{sec:Environments}}
 
@@ -619,14 +696,21 @@ Many lens systems have significant contributions from in their local environment
 \end{figure*}
 
 
-\begin{figure}[!h]
+\begin{figure}
 \begin{center}
 \includegraphics[width=1\columnwidth]{RXJ1131_dx3_hist.pdf}
-\caption{\label{fig:d3xhist} Histogram of flexion shifts for galaxies within 5' of RXJ1131.  The dark (light) gray bins represent perturbing galaxies in the foreground (background) of the main lens galaxy, while the silver bins in between correspond to group members in the immediate environment of the main lens. The range of flexion shifts for this field spans $\sim 8$ orders of magnitude. For reference, when generating our $\chi^2$ values, we have assumed a positional uncertainty of $3 \times 10^{-3}$ arcseconds. Few individual perturbing galaxies have that large of flexion shift, but the cumulative flexion is easily larger than our assumed measurement uncertainties. As anticipated, foreground perturbers and group members tend to have larger $\Delta_3 x$ values than background perturbers.%
-}
+\caption{\label{fig:d3xhist} Histogram of flexion shifts for galaxies within 5' of RXJ1131.  The dark (light) gray bins represent perturbing galaxies in the foreground (background) of the main lens galaxy, while the tan bins in between correspond to group members in the immediate environment of the main lens. The range of flexion shifts for this field spans $\sim 8$ orders of magnitude. We have reversed the x-axis for comparison to subsequent figures. Perturbers with large a flexion shift, and therefore a large contribution to the lens potential, are on the left. For reference, when generating our $\chi^2$ values, we have assumed a positional uncertainty of $3 \times 10^{-3}$ arcseconds. Few individual perturbing galaxies have that large of flexion shift, but the cumulative flexion is easily larger than our assumed measurement uncertainties. As anticipated, foreground perturbers and group members tend to have larger $\Delta_3 x$ values than background perturbers.}
 \end{center}
 \end{figure}
 
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\columnwidth]{suyu_kappa.pdf}
+\caption{\label{fig:kappa} Probability distribution for the external convergence in the RXJ1131 field. The blue histogram shows the effective convergence computed directly from our 3-D mass models, accounting for measurement uncertainties and scatter in the relations used to assign masses to galaxies. The red curve shows the external convergence distribution derived using galaxy number counts from the Millennium simulation by \citet{Suyu13}. The peaks of the distributions are roughly consistent, but our models favor slightly lower values of external convergence. Because we build mass models for the specific, observed field, we obtain a $\sim 4$ times narrower distribution that effectively translates into a stronger prior on the Hubble constant.%
+}
+\end{center}
+\end{figure}
 
 \begin{figure*}
 \begin{center}
@@ -636,33 +720,23 @@ Many lens systems have significant contributions from in their local environment
 \end{center}
 \end{figure*}
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=\columnwidth]{suyu_kappa.pdf}
-\caption{\label{fig:kappa} Probability distribution for the external convergence in the RXJ1131 field. The blue histogram shows the effective convergence computed directly from our 3-D mass models, accounting for measurement uncertainties and scatter in the relations used to assign masses to galaxies. The red curve shows the external convergence distribution derived using galaxy number counts from the Millennium simulation by \citet{Suyu13}. The peaks of the distributions match well. Because we build mass models for the specific, observed field, we obtain a $\sim 4$ times narrower distribution that effectively translates into a stronger prior on the Hubble constant.%
-}
-\end{center}
-\end{figure}
+Now that we have a quantity to assess the importance of individual galaxies, we can apply this criterion to realistic mass models that have hundreds of ENV/LOS galaxies. This allows us to characterize which ENV/LOS galaxies produce the strong effects on the inferred Hubble constant. The perturbing ENV/LOS galaxies that produce strongest ENV/LOS effects can then be treated with more care (i.e., as ``main'' planes in our hybrid framework). The flexion shift criterion also gives us the ability to compare the mass models for different lens fields, in principle allowing us to select fields that do not have strong contributions as a ``gold sample'' of lenses for future surveys like LSST and Euclid. 
 
 
-Now that we have a quantity to assess the importance of indiviudal galaxies, we can apply this criterion to realistic mass models that have hundreds of ENV/LOS galaxies. This allows us to characterize which ENV/LOS galaxies produce the strong effects on the inferred Hubble constant. The perturbing ENV/LOS galaxies that produce strongest ENV/LOS effects can then be treated with more care (i.e., as ``main'' planes in our hybrid framework). The flexion shift criterion also gives us the ability to compare the mass models for different lens fields, in principle allowing us to select fields that do not have strong contributions as a ``gold sample'' of lenses for future surveys like LSST. 
-
-
-To gain intuition about how the flexion shift applies to realistic beams, we first calculate the flexion shift for all of the perturbering ENV/LOS galaxies in the lens system RXJ1131, which has a source at redshift $z_{\rm{src}} = 0.658$ and a lens in a group at redshift $z_{\rm{lens}} = 0.2936$.  We adopt an Einstein radius of $R_E = 1.5''$, close to the measured value \citep{Suyu13} and also close to the peak of the observed distribution \citep{Sonnenfeld13}, and an ellipticity of $e=0.3$.  Figure \ref{fig:fieldrz} illustrates $\Delta_3 x$ values for galaxies in this field.  While $\Delta_3 x$ generally increases toward the lens, there is no single radial cut that can be used to determine the importance of a perturber because perturber mass and redshift must also be taken into account.  By following contours of constant $\Delta_3 x$, as illustrated in right-hand panel, we can determine the effective radial offset for the perturber if it were in the main lens plane. Since background perturbers are downweighted by ($1-\beta)^2$, they must have a smaller projected offset to have the same effect as if they were in the main lens plane. Perturbing galaxies in the foreground are slightly upweighted because the Einstein radius of a point mass perturber increases as we move it to lower redshift, which means that foreground galaxies can have a larger projected offset to have the same effect as if they were at the main lens redshift.
+To gain intuition about how the flexion shift applies to realistic beams, we first calculate the flexion shift for all of the perturbing ENV/LOS galaxies in the lens system RXJ1131, which has a source at redshift $z_{\rm{src}} = 0.658$ and a lens in a group at redshift $z_{\rm{lens}} = 0.2936$.  We adopt an Einstein radius of $R_E = 1.5''$, close to the measured value \citep{Suyu13} and also close to the peak of the observed distribution \citep{Sonnenfeld13}, and an ellipticity of $e=0.3$.  Figure \ref{fig:fieldrz} illustrates $\Delta_3 x$ values for galaxies in this field.  While $\Delta_3 x$ generally increases toward the lens, there is no single radial cut that can be used to determine the importance of a perturber because perturber mass and redshift must also be taken into account.  By following contours of constant $\Delta_3 x$, as illustrated in right-hand panel, we can determine the effective radial offset for the perturber if it were in the main lens plane. Since background perturbers are downweighted by ($1-\beta)^2$, they must have a smaller projected offset to have the same effect as if they were in the main lens plane. Perturbing galaxies in the foreground are slightly upweighted because the Einstein radius of a point mass perturber increases as we move it to lower redshift, which means that foreground galaxies can have a larger projected offset to have the same effect as if they were at the main lens redshift.
 
 Figure \ref{fig:d3xhist} shows a histogram of all the $\Delta_3 x$ values for this field.  The flexion shifts range from $\sim 5 \times 10^{-3}$ arcseconds down to $<10^{-10}$ arcseconds, with background perturbers generally having smaller values than foreground perturbers or group members.  In the next section we consider the quantitative threshold for $\Delta_3 x$ needed to achieve desired accuracy and precision in lens model results.
 
-We can also characterize values of the flexion shift for a wider range of fields.  Figure \ref{fig:allfields} shows $\Delta_3 x$ values for nine other multiply-imaged QSO fields from \citet{Wong11}.  The fields are all complex; there is not a simple radial cut that divides the sample into exact and tidal perturbers.  There is striking diversity in the strength of external effects.  There is no single number of galaxies that is guaranteed to be be the ``right'' number to include in lens models.  Each field must be considered on an individual basis.
+While external convergence does not capture all LOS effects (it omits non-linearities in eq.\ \ref{eqn:full_mp}), it is a useful quantity for comparing to previous work. \citet{Suyu13} (see also \citealt{Rusu16}) used the Millennium simulation along with galaxy number counts around RXJ1131 to estimate a prior probability distribution for the external convergence used to constrain the Hubble constant; their distribution is shown in red in Figure \ref{fig:kappa}. We compute the effective convergence (as defined in M14 and references therein) directly from our mass models for RXJ1131.  We consider many realizations that account for observational uncertainties and scatter in the relations used to assign masses to galaxies described in Section \ref{sec:massmodels}.  This yields a distribution of ``direct'' convergence calculations that is shown by the blue histogram in Figure \ref{fig:kappa}. We find that the peaks of the distributions are roughly consistent. However, our ``direct'' convergence calculations produce a tighter distribution by a factor of $\sim 4$. This is likely because we build mass models based on the observed beam for each individual lens rather than using statistical results from N-body simulations. The narrower distribution of external convergences translates into a stronger prior on measuring the Hubble constant.
 
-While external convergence does not capture all LOS effects (it omits non-linearities in eq.\ \ref{eqn:full_mp}), it is a useful quantity for comparing to previous work. \citet{Suyu13} used the Millennium simulation along with galaxy number counts around RXJ1131 to estimate a prior probability distribution for the external convergence used to constrain the Hubble constant; their distribution is shown in red in Figure \ref{fig:kappa}. We compute the effective convergence (as defined in M14 and references therein) directly from our mass models for RXJ1131.  We consider many realizations that account for observational uncertainties and scatter in the relations used to assign masses to galaxies described above.  This yields a distribution of ``direct'' convergence calculations that is shown by the blue histogram in Figure \ref{fig:kappa}. We find that the peaks of the distributions match closely. However, our ``direct'' convergence calculations produce a tighter distribution by a factor of $\sim 4$. This is likely because we build mass models based on the observed beam for each individual lens rather than using statistical results from N-body simulations. The narrower distribution of external convergences translates into a stronger prior on measuring the Hubble constant.
+We can also characterize values of the flexion shift for a wider range of fields.  Figure \ref{fig:allfields} shows $\Delta_3 x$ values for nine other multiply-imaged QSO fields from \citet{Wong11}.  The fields are all complex; there is not a simple radial cut that divides the sample into exact and tidal perturbers.  There is striking diversity in the strength of external effects.  There is no single number of galaxies that is guaranteed to be the ``right'' number to include in lens models.  Each field must be considered on an individual basis.
 
-
-While each field is unique, we expect that some fields will have stronger ENV/LOS contributions than others. One important factor may be whether the main lens galaxy is part of a group. To make a simple quantitative comparison, we add the flexion shifts ($\Delta_3 x$ values) in a given beam. The higher order effects due to flexion terms combine in a more complicated way (as the flexion is a tensor), but the simple sum gives an a good estimate of the importance of the ENV/LOS of the lens. If there are many nearby, massive perturbers then the sum will be large, implying a strong ENV/LOS contribution (such as HST14113 in Figure \ref{fig:allfields}). Conversely, in a sparser field the sum will be smaller (such as B0712). Figure \ref{fig:d3xsums} shows a histogram of the sums for our set of 23 lens field. While the sample size is not large, it is apparent that lenses that are members of a group tend to have stronger ENV/LOS contributions than those that are not.
+While each field is unique, we do expect that some fields will have stronger ENV/LOS contributions than others. One important factor may be whether the main lens galaxy is part of a group. To make a simple quantitative comparison, we add the flexion shifts ($\Delta_3 x$ values) in a given beam. The higher order effects due to flexion terms combine in a more complicated way (as the flexion is a tensor), but the simple sum gives an a good estimate of the importance of the ENV/LOS of the lens. If there are many nearby, massive perturbers then the sum will be large, implying a strong ENV/LOS contribution (such as HST14113 in Figure \ref{fig:allfields}). Conversely, in a sparser field the sum will be smaller (such as B0712). Figure \ref{fig:d3xsums} shows a histogram of the sums for our set of 23 lens field. While the sample size is not large, it is apparent that lenses that are members of a group tend to have stronger ENV/LOS contributions than those that are not.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{d3xsums.pdf}
-\caption{Distribution of ENV/LOS strengths for our sample of 3-D mass models. Beams for which the lens galaxy is a member of a group are shown in blue, while non-group lenses are shown in red. Lenses in groups typically have stronger ENV/LOS contributions than those that are not group memebers. However, there is substantial overlap so each field needs to be treated individually.}
+\caption{Distribution of ENV/LOS strengths for our sample of 3-D mass models. Beams for which the lens galaxy is a member of a group are shown in black, while non-group lenses are shown in red. Lenses in groups typically have stronger ENV/LOS contributions than those that are not group members. However, there is substantial overlap so each field needs to be treated individually.}
 \label{fig:d3xsums}
 \end{figure}
 
@@ -675,7 +749,7 @@ Now that we have characterized our mass models, we consider whether different me
 \begin{figure*}[ht]
 \begin{center}
 \includegraphics[width=1\textwidth]{all_none_1e-2.pdf}
-\caption{\label{fig:none_triangle} Posterior distributions for model parameters from Lens-Only models fit to mock quad lenses in the field of RXJ1131. The true input values are marked with crosses in the contour plots and with a dashed line in the histograms. We combine MCMC results for 300 mock lenses with different source positions and azimuthal angles for the main lens galaxy.  Contours containing $68\%$ and $95\%$ of the MCMC trials are shown in white. Many of the parameters show significant biases and the distributions are often degenerate and multi-modal. These results suggest that ENV/LOS cannot be ignored. The recovered values of the Hubble constant have a scatter of $\sim 20\%$, more than an order of magnitude larger than our goal for ``Precision Lensing'' of $1\%$. The plotting ranges for corresponding parameters are the same as Figures \ref{fig:shear_triangle} and \ref{fig:los_triangle} to facilitate direct comparison.
+\caption{\label{fig:none_triangle} Posterior distributions for model parameters from Lens-Only models fit to mock quad lenses in the field of RXJ1131. The true input values are marked with crosses in the contour plots and with a dashed line in the histograms. We combine MCMC results for 300 mock lenses with different source positions and azimuthal angles for the main lens galaxy.  Contours containing $68\%$ and $95\%$ of the MCMC trials are shown in white. Many of the parameters show significant biases and the distributions are often degenerate and multi-modal. These results suggest that ENV/LOS cannot be ignored. The recovered values of the Hubble constant have a scatter of $\sim 20\%$, more than an order of magnitude larger than our goal for ``Precision Lensing'' of $<1\%$. The plotting ranges for corresponding parameters are the same as Figures \ref{fig:shear_triangle} and \ref{fig:los_triangle} to facilitate direct comparison.
 }
 \end{center}
 \end{figure*}
@@ -690,16 +764,16 @@ We begin with Lens-Only models that do not explicitly account for any ENV/LOS ef
 \end{center}
 \end{figure*}
 
-Next we consider the Lens+Shear models. These models have two extra free parameters that can be used to capture some ENV/LOS effects. The results of the fits are shown in Figure \ref{fig:shear_triangle}. The posterior distributions of the recovered lens parameters are considerably tighter than for Lens-Only models. However, these models still have biases that are most dramatic in the Einstein radius and Hubble constant. The bias is associated with external convergence: the total mass in the simulated lenses includes contributions from the environment and LOS; if we assign all of that mass to the main lens galaxy (as in Lens+Shear and Lens-Only models), we overestimate the galaxy's mass and Einstein radius.  In the traditional approach, external convergence must be included through post-processing \citep{Collett13, Suyu10}. 
+Next we consider the Lens+Shear models. These models have two extra free parameters that can be used to capture some ENV/LOS effects. The results of the fits are shown in Figure \ref{fig:shear_triangle}. The posterior distributions of the recovered lens parameters are considerably tighter than for Lens-Only models. However, these models still have biases that are most dramatic in the Einstein radius and Hubble constant. The bias is associated with external convergence: the total mass in the simulated lenses includes contributions from the environment and LOS; if we assign all of that mass to the main lens galaxy (as in Lens+Shear and Lens-Only models), we overestimate the galaxy's mass and Einstein radius.  In this approach, external convergence must be included through post-processing \citep{Collett13, Suyu10}. The biases that we find are larger than those found in \citet{Jaroszynski16} for random sight lines in the Millenium Simulation. However, they point out that their sight lines, on average, are not as dense as that of RXJ1131. This is in agreement with \citet{Collett16} who find that lenses tend to be in (slightly) overdense lines-of-sight.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\columnwidth]{shear_offset.pdf}
-\caption{Marginalized posterior distribution of fitted external shear values from the Lens+Shear models. $68\%$ and $95\%$ contours are shown in white. The effective shear calculated from the input 3-D mass model is shown with an orange cross. The peak of the distribution from the MCMC models is $\sim 2.5 \sigma$ away from the truth, similar to what was found by \citet{Wong11}. The offset appears to be inherent to the lens modelling process, possibly due to non-linear effects from foreground perturbing galaxies.}
+\caption{Marginalized posterior distribution of fitted external shear values from the Lens+Shear models. $68\%$ and $95\%$ contours are shown in white. The effective shear calculated from the input 3-D mass model is shown with an orange cross. The peak of the distribution from the MCMC models is $\sim 2 \sigma$ away from the truth, similar to what was found by \citet{Wong11}. The offset appears to be inherent to the lens modelling process, possibly due to non-linear effects from foreground perturbing galaxies.}
 \label{fig:shear_compare}
 \end{figure}
 
-\citet{Wong11} found that fitted shear parameters from the Lens+Shear models did not always match the shears computed directly from 3-D mass models in real lenses, including RXJ1131. We reexamine this result using our controlled simulations. Figure \ref{fig:shear_compare} compares the distributed of fitted shear parameters with the known value of the effective shear for this ENV/LOS. The fitted shear parameters disagree with the true effective shear at the $\sim 2.5\sigma$ level, broadly consistent with the results found in \citet{Wong11}. While a deeper analysis of the difference is beyond the scope of this work, the results in Figure \ref{fig:shear_compare} suggest that the offsets found by \citet{Wong11} are associated with the lens modeling procedure; they may arise because the fitted shear is attempting to account for non-linear effects due to foreground perturbing galaxies.
+\citet{Wong11} found that fitted shear parameters from the Lens+Shear models did not always match the shears computed directly from 3-D mass models in real lenses, including RXJ1131. We reexamine this result using our controlled simulations. Figure \ref{fig:shear_compare} compares the distributed of fitted shear parameters with the known value of the effective shear for this ENV/LOS. The fitted shear parameters disagree with the true effective shear at the $\sim 2\sigma$ level, broadly consistent with the results found in \citet{Wong11}. While a deeper analysis of the difference is beyond the scope of this work, the results in Figure \ref{fig:shear_compare} suggest that the offsets found by \citet{Wong11} are associated with the lens modeling procedure; they may arise because the fitted shear is attempting to account for non-linear effects due to foreground perturbing galaxies.
 
 \begin{figure*}[ht]
 \begin{center}
@@ -710,7 +784,9 @@ Next we consider the Lens+Shear models. These models have two extra free paramet
 \end{figure*}
 
 Lastly, we consider our 3-D lens models. We initially treat all perturbing galaxies in the tidal approximation. This allows us to disentangle the non-linear effects, which are included in our models because we use the same mass model that was used to generate the lensing observables, and higher-order terms, which are included when generating the lens observables (see Section \ref{sec:observables}), but not in the fits. 
-Figure \ref{fig:los_triangle} shows posterior distributions of the recovered lens parameters and Hubble constant. There is no bias in any of the parameters recovered from these models. Our 3-D Lens models avoid the biases seen in other models because, rather than treating shear and convergence separately, we build a physical model and then extract both shear and convergence self-consistently. We favor this approach because shear and convergence arise from the same underlying mass distribution and are therefore not independent.
+Figure \ref{fig:los_triangle} shows posterior distributions of the recovered lens parameters and Hubble constant. There is no bias in any of the parameters recovered from these models. Our 3-D Lens models avoid the biases seen in other models because, rather than treating shear and convergence separately, we build a physical model and then extract both shear and convergence self-consistently. We favor this approach because shear and convergence arise from the same underlying mass distribution and are therefore not independent. 
+
+The main difference between the Lens+Shear and the 3-D Lens models is the inclusion of non-linear effects in the 3-D Lens models. Therefore, the broader posterior distributions that we observe for the Lens+Shear models must be driven by non-linear effects.
 
 However, there are strong correlations among the recovered ellipticity, power law index, and Hubble constant for our 3-D lens models. These correlations involving the Hubble constant are associated with the ``lens profile degeneracy'':  there can be a range of density profiles that all yield a good fit but lead to different values for $h$.  \citet{Kochanek02} shows that to lowest order the degeneracy is characterized by the scaling $h \propto 1 - \langle \kappa \rangle$ where $\langle \kappa \rangle$ is the average convergence from the main lens in the annulus between the image positions.  If we assume that the image annulus is narrow and centered on the Einstein radius, we can evaluate the angle average as
 \begin{equation}
@@ -734,24 +810,24 @@ We test this analysis by plotting $h/(1-\langle\kappa\rangle)$ in Figure \ref{fi
 \end{center}
 \end{figure*}
 
-The fact that these correlations are seen in our 3-D lens models suggests that the ENV/LOS does not break the lens profile degeneracy. This is consistent with the idea that ENV/LOS effects are produced by structure on much larger spatial scales than is relevant for the lens profile degeneracy \citep{Xu15,Schneider13}. The lens profile must be broken instead with kinematic information \citep[e.g.][]{Suyu13} or with extended source modeling \citep{Suyu12}.
+The fact that these correlations are seen in our 3-D lens models suggests that the ENV/LOS does not break the lens profile degeneracy. This is consistent with the idea that ENV/LOS effects are produced by structure on much larger spatial scales than is relevant for the lens profile degeneracy \citep{Xu16,Schneider13}. The lens profile must be broken instead with kinematic information \citep[e.g.,][]{Suyu13} or with extended source modeling \citep{Suyu12}.
 
-Our next goal is to determine when it is valid to use the tidal approximation.  We want to find a sweet spot that speeds up the modeling without introducing systematic uncertainties that are larger than the measurement uncertainties.  Figure \ref{fig:RXJ1131} shows results from 3-D Lens model fits with different cuts on the flexion shift, $\Delta_3 x$.  Each point on the horizontal axis corresponds to a different \emph{threshold} for $\Delta_3 x$: galaxies with larger flexion shifts are treated exactly, while galaxies with smaller values are treated with the tidal approximation.  (Note that the threshold \emph{decreases} from left to right in the plot; at a given point, galaxies to the left are exact perturbers while galaxies to the right are tidal perturbers.)  The error bars mark the $16^{th}$ and $84^{th}$ percentiles of the posterior distribution for the lens model parameters.  Our modeling uses MCMC methods to obtain posterior distributions, so the errorbars correspond to marginalized single-parameter posteriors.
+Our next goal is to determine when it is valid to use the tidal approximation.  We want to find a sweet spot that speeds up the modeling without introducing systematic uncertainties that are larger than the measurement uncertainties.  Figure \ref{fig:RXJ1131} shows results from 3-D Lens model fits with different cuts on the flexion shift, $\Delta_3 x$.  Each point on the horizontal axis corresponds to a different \emph{threshold} for $\Delta_3 x$: galaxies with larger flexion shifts are treated exactly, while galaxies with smaller values are treated with the tidal approximation.  (Note that the threshold \emph{decreases} from left to right in the plot; at a given point, galaxies to the left are exact perturbers while galaxies to the right are tidal perturbers.)  The error bars mark the $16^{th}$ and $84^{th}$ percentiles of the posterior distribution for the lens model parameters.  Our modeling uses MCMC methods to obtain posterior distributions, so the error bars correspond to marginalized single-parameter posteriors.
 
-The first result from Figure \ref{fig:RXJ1131} is that 3-D Lens models do not show any bias in key parameters, even if all of the ENV/LOS galaxies are treated in the tidal approximation, at least for the RXJ1131 field. The scatter in model parameters decreases a little as the $\Delta_3 x$ threshold is reduced and the strongest perturbers are incorporated into the model explicitly.  We believe that it is worthwhile to set a conservative threshold of $\Delta_3 x \sim 10^{-4}$ arcseconds (i.e., 1.5 dex smaller than our astrometric uncertainties), which amounts to including the strongest 10--15 perturbers explicitly as main planes. The computational complexity of the full multi-plane lens equation scales as $\sim N^2$, the reduction from $\sim 300$ galaxies to treating all but 10--15 using the tidal approximation produces an improvement in the performance by a factor of 400--900.
+The first result from Figure \ref{fig:RXJ1131} is that 3-D Lens models do not show any bias in key parameters, even if all of the ENV/LOS galaxies are treated in the tidal approximation, at least for the RXJ1131 field. The scatter in model parameters decreases a little as the $\Delta_3 x$ threshold is reduced and the strongest perturbers are incorporated into the model explicitly. This will be especially important if some extra constraint on the radial profile, e.g., kinematics, is available.  We believe that it is worthwhile to set a conservative threshold of $\Delta_3 x \sim 10^{-4}$ arcseconds (i.e., 1.5 dex smaller than our astrometric uncertainties), which amounts to including the strongest 10--15 perturbers explicitly as main planes. The computational complexity of the full multi-plane lens equation scales as $\sim N^2$, the reduction from $\sim 300$ galaxies to treating all but 10--15 using the tidal approximation produces an improvement in the performance by a factor of 400--900.
 
-However, the Lens-Only and Lens+Shear models do show a bias, as mentioned above. Introducing a few of the strongest perturbers (i.e., moving to the right in the figure) means that we begin to explicitly include the most important ENV/LOS galaxies. Thus as we move to the right in the figure, the need for an ``external'' convergence is no longer necessary because it already included in the models, which in turn reduces the bias in the recovered parameters.  In principle, there is a point at which the sources of convergence are properly accounted for and the bias is removed.  In practice, that point is not easy to determine \emph{a priori}.  Going to very small values of $\Delta_3 x$ (i.e., far to the right in the figure) actually leads to a negative bias.  This is because Lens-Only and Lens+Shear models do not include the void correction discussed in Section \ref{sec:voids}.  Apparently the void correction is approximately 2\% in the Einstein radius for the RXJ1131 field.
+The Lens-Only and Lens+Shear models do show a bias, as mentioned above due to external convergence. Introducing a few of the strongest perturbers (i.e., moving to the right in the figure) means that we begin to explicitly include the most important ENV/LOS galaxies. Thus as we move to the right in the figure, the need for an ``external'' convergence is no longer necessary because it already included in the models, which in turn reduces the bias in the recovered parameters.  In principle, there is a point at which the sources of convergence are properly accounted for and the bias is removed.  In practice, that point is not easy to determine \emph{a priori}.  Going to very small values of $\Delta_3 x$ (i.e., far to the right in the figure) actually leads to a negative bias.  This is because Lens-Only and Lens+Shear models do not include the void correction discussed in Section \ref{sec:voids}.  This implies that the void correction is approximately 2\% in the Einstein radius for the RXJ1131 field.
 
 
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=1\columnwidth]{new_RXJ1131_reallos.pdf}
-\caption{\label{fig:RXJ1131} Results for lens models with different thresholds for the tidal approximation, using the RXJ1131 field.  For a given value of $\Delta_3 x$, we run models in which all perturbing galaxies with a larger value of the flexion shift (i.e., those toward the left in the bottom panel) are treated exactly, while perturbing galaxies with a smaller value of the flexion shift (i.e., those toward the right) are treated with the tidal approximation.  Starting at the left, all perturbers are tidal (as in Figs.\ \ref{fig:none_triangle},  \ref{fig:shear_triangle}, and \ref{fig:los_triangle}); moving to the right increases the number of perturbers that are treated explicitly instead.  The top panel shows the median and 68\% confidence interval for the Hubble constant recovered from 3-D Lens models (blue), Lens+Shear models (red), and Lens-Only models (green). The scatter is driven by the lens profile degeneracy.  The middle panel shows similar results for the Einstein radius parameter. Lens-Only and Lens+Shear models tend to be biased because of external convergence effects which are typically added in post-processing. For RXJ1131, this accounts for a $7\%$ correction, consistent with the peak of the distribution shown in Figure \ref{fig:kappa}. As we include more galaxies exactly, moving to the right of the plot, the bias begins to disappear because we are taking into account more of the convergence explicitly. However, as we take many of the ENV/LOS galaxies into account exactly, the Lens-Only and Lens+Shear models dip below the truth. This is due to the smooth mass correction for voids which is not included in the Lens-Only and Lens+Shear models. Our simulation results suggest that the void correction is $\sim 2\%$ for RXJ1131.
+\caption{\label{fig:RXJ1131} Results for lens models with different thresholds for the tidal approximation, using the RXJ1131 field.  For a given value of $\Delta_3 x$, we run models in which all perturbing galaxies with a larger value of the flexion shift (i.e., those toward the left in the bottom panel) are treated exactly, while perturbing galaxies with a smaller value of the flexion shift (i.e., those toward the right) are treated with the tidal approximation.  Starting at the left, all perturbers are tidal (as in Figs.\ \ref{fig:none_triangle},  \ref{fig:shear_triangle}, and \ref{fig:los_triangle}); moving to the right increases the number of perturbers that are treated explicitly instead.  The top panel shows the median (points) and 68\% confidence (colored band) interval for the Hubble constant recovered from 3-D Lens models (blue), Lens+Shear models (red), and Lens-Only models (green). The scatter is driven by the lens profile degeneracy.  The middle panel shows similar results for the Einstein radius parameter. Lens-Only and Lens+Shear models tend to be biased because of external convergence effects which are typically added in post-processing. For RXJ1131, this accounts for a $7\%$ correction, consistent with the peak of the distribution shown in Figure \ref{fig:kappa}. As we include more galaxies exactly, moving to the right of the plot, the bias begins to disappear because we are taking into account more of the convergence explicitly. However, as we take many of the ENV/LOS galaxies into account exactly, the Lens-Only and Lens+Shear models dip below the truth. This is due to the smooth mass correction for voids which is not included in the Lens-Only and Lens+Shear models. Our simulation results suggest that the void correction is $\sim 2\%$ for RXJ1131.
 }
 \end{center}
 \end{figure}
 
-So far, we have presented results for a single lens field.  In order to understand whether our conclusions are general, we need to examine how ENV/LOS effects vary from one lensing field to another. One simple test is to compare models that use the same fiducial main lens galaxy ($R_E = 1.5\arcsec$ and $e=0.3$) but different fields.  Figure \ref{fig:B0712} shows results from simulations using the field of B0712+472 (hereafter B0712; \citealt{Jackson98}).  The trends are similar to what we saw for RXJ1131 in Figure \ref{fig:RXJ1131}, but the deviations are somewhat smaller here because the ENV/LOS effects are not as strong in this field (as we saw in Section \ref{sec:Environments}).  The correction due to voids is larger for B0712 at $\sim4\%$. Therefore, the qualitative trends of our results appear to be robust, but the quantiative differences indicate that each lens field needs to be treated on an individual basis.
+So far, we have presented results for a single lens field.  In order to understand whether our conclusions are general, we need to examine how ENV/LOS effects vary from one lensing field to another. One simple test is to compare models that use the same fiducial main lens galaxy ($R_E = 1.5\arcsec$ and $e=0.3$) but different fields.  Figure \ref{fig:B0712} shows results from simulations using the field of B0712+472 (hereafter B0712; \citealt{Jackson98}).  The trends are similar to what we saw for RXJ1131 in Figure \ref{fig:RXJ1131}, but the deviations are somewhat smaller here because the ENV/LOS effects are not as strong in this field (as we saw in Section \ref{sec:Environments}).  The correction due to voids is larger for B0712 at $\sim4\%$. Therefore, the qualitative trends of our results appear to be robust, but the quantitative differences indicate that each lens field needs to be treated on an individual basis.
 
 \begin{figure}[t]
 \begin{center}
@@ -764,14 +840,14 @@ So far, we have presented results for a single lens field.  In order to understa
 In this analysis we have placed the same lens galaxy in different 3-D mass models to see how the ENV/LOS effects vary.  The complementary step is to fix the 3-D model and vary the main lens galaxy to understand how that changes the sensitivity to ENV/LOS effects.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{What Lens Properties Yield the Strongest Constraints on Cosmology?}
+\subsection{What Lens Properties Lead to the Strongest Constraints on Cosmology?}
 \label{sec:ImageConfigs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In our final set of simulations, we choose one ENV/LOS mass model (for the RXJ1131 field) and test how the constraints on the Hubble constant change when we vary the parameters of the main lens galaxy and the position of the source behind the lens.
 
 One important parameter of the main lens galaxy is the ellipticity. Figure \ref{fig:ecompare} compares results from simulations with different values of $e$.  As the ellipticity increases, the scatter in the recovered Hubble constant decreases.
-The image configurations of very asymmetric lens galaxies can only be produced for a smaller range of lens models, leading to stronger constraints on both the ellipticity and the power law index.  Since those parameters are correlated with the Hubble constant through the lens profile degeneracy, reducing the range of $e$ and $\eta$ leads to a narrower range for $h$ as well.
+The image configurations of very asymmetric lens galaxies can only be produced for a smaller range of lens models, leading to stronger constraints on both the ellipticity and the power law index.  Since those parameters are correlated with the Hubble constant through the lens profile degeneracy, reducing the scatter of fitted $e$ and $\eta$ values leads to a narrower range for $h$ as well.
 
 \begin{figure*}
 \begin{center}
@@ -795,13 +871,13 @@ One possible approach to using gravitational lensing for precision cosmology is 
 
 The final system parameter we probe is the source position. In previous simulations, we have marginalized over the orientation of the main lens galaxy, which would wash out any trends we would see in the source plane. Instead, we now fix the lens system to match the real RXJ1131. \citet{Suyu13} find the best fit parameters of RXJ1131 to be $b = 1.64$'', $\eta = 1.05$, $e = 0.237$, and $\theta_e = 115.8^{\circ}$. We generate mock data for this configuration and then perform a modeling analysis as above, again treating all ENV/LOS galaxies in the tidal approximation.
 
-Figure \ref{fig:srcpos} shows the median and scatter in the best fit Hubble constant as a function of source position. The models do well when the source is near a caustic. However, near the center of the caustic, both sets of models have larger scatter in the recovered values for the Hubble constant. These source positions correspond to more symmetric image configurations, with the exact center producing an Einstein ring. Symmetric image configurations produce weaker constraints on the ellipticity than asymmetric image configurations and are therefore more susceptible to lens profile degeneracy as discussed above.
+Figure \ref{fig:srcpos} shows the median and scatter in the best fit Hubble constant as a function of source position. The models do well when the source is near a caustic. However, near the center of the caustic, both sets of models have larger scatter in the recovered values for the Hubble constant. These source positions correspond to more symmetric image configurations, with the exact center producing an Einstein cross. Symmetric image configurations produce weaker constraints on the ellipticity than asymmetric image configurations and are therefore more susceptible to lens profile degeneracy as discussed above.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=1\columnwidth]{h_src_pos.pdf}
 \caption{\label{fig:srcpos}
-Median value (top) and scatter (bottom) for the recovered Hubble constant as a function of source position. The models have little bias and small scatter near caustics, but show an increased scatter/bias near the center. These central source positions correspond to more symmetric image configurations which produce weaker constraints on the ellipticity and are therefore more susceptible to the lens profile degeneracy. More asymmetric image configurations produce stronger contraints on the lens galaxy ellipticity and in turn on the Hubble constant.
+Median value (top) and scatter (bottom) for the recovered Hubble constant as a function of source position. The models have little bias and small scatter near caustics, but show an increased scatter/bias near the center. These central source positions correspond to more symmetric image configurations which produce weaker constraints on the ellipticity and are therefore more susceptible to the lens profile degeneracy. More asymmetric image configurations produce stronger constraints on the lens galaxy ellipticity and in turn on the Hubble constant.
 }
 \end{center}
 \end{figure}
@@ -816,25 +892,26 @@ To understand and quantify how the ENV/LOS affects lensing, we have generated 3-
 
 We find that perturbers in the foreground of the lens affect the lens potential more than those in the background for two different reasons. The first is that background perturbers are downweighted; a background perturber must be closer in projection to have the same effect as a foreground perturber. The second is that while background perturbers can be mimicked by a shear in the lens plane, foreground perturbers create non-linear effects that cannot be fit with a simple external shear.
 
-Using our results based on individual perturbing galaxies, we define a quantity that we have termed the ``flexion shift'', $\Delta_3 x$ (eqs.\ \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x}), to characterize the ENV/LOS contributions to the lens potential.
+Using our results based on individual perturbing galaxies, we define a quantity that we have termed the ``flexion shift'', $\Delta_3 x$ (eqs.\ \ref{eqn:backgroundd3x} and \ref{eqn:foregroundd3x}), that estimates the deviations in lensed image positions due to third order (flexion) terms and can be used to characterize the ENV/LOS contributions to the lens potential for an individual perturbing galaxy.
 
-Using this quantity, we find that the importance of environment/LOS effects varies significantly from field to field. Therefore, we argue that each field needs to be modeled individually. Even accounting for the uncertainties in building the 3-D mass models, we find that directly calculating the external converenge from the 3-D mass models produces a narrower distribution than that from ray tracing through N-body simulations. This translates to a stronger prior on measuring the Hubble constant. We find that lens galaxies that are in groups tend to have a stronger contribution from the ENV/LOS than those that are not in groups. 
+Using this quantity, we find that the importance of environment/LOS effects varies significantly from field to field. Therefore, we argue that each field needs to be modeled individually. Even accounting for the uncertainties in building the 3-D mass models, we find that directly calculating the external convergence from the 3-D mass models produces a narrower distribution than that from ray tracing through N-body simulations. This translates to a stronger prior on measuring the Hubble constant. We find that lens galaxies that are in groups tend to have a stronger contribution from the ENV/LOS than those that are not in groups. 
 
-We show that fitting lens models that ignore the ENV/LOS does not reproduce the input lens system parameters or the Hubble constant. Models that fit an external shear, the Lens+Shear models, overpredict the Hubble constant and the Einstein radius of the main lens galaxy; these quantities need to be corrected using some other constraint on the external convergence, typically done in post processing. Our 3-D lens models do not produce this bias because we explicitly include the convergence in the lens models.
+We show that fitting lens models that ignore the ENV/LOS does not reproduce the input lens system parameters or the Hubble constant. Models that fit an external shear, the Lens+Shear models, overpredict the Hubble constant and the Einstein radius of the main lens galaxy; these quantities need to be corrected using some other constraint on the external convergence, which is typically done in post processing. Our 3-D lens models do not produce this bias (or biases in any other model parameters) because we explicitly include the convergence in the lens models. It is still possible that there may be some unexpected bias from how we construct mass models, but that is beyond of the scope of this paper and will be considered in more detail in future works. 
 
-We show that all models, including both the Lens+Shear and 3-D Lens models, are subject to the lens profile degeneracy in agreement with \citet{Xu15,Schneider13}. Extra information like kinematic measurements or extended source reconstruction techniques are necessary.
+We show that all models, including both the Lens+Shear and 3-D Lens models, are subject to the lens profile degeneracy in agreement with \citet{Xu16, Schneider13, Sluse12}. Extra information like kinematic measurements or extended source reconstruction techniques are necessary.
 
-For either methodology of fitting an external shear or using our LOS framework, we still must choose which galaxies are treated exactly and which are treated in the tidal approximation. We find that we can reproduce the true lens parameters with no bias and a scatter less than the observational uncertainties if we use a cutoff in $\Delta_3 x$ of $10^{-4}$ arcseconds, a factor of 30 smaller than the assumed uncertainties on the observed positions. This cut typically requires 10-15 galaxies of $\sim 300$ galaxies within 5 arcminutes to be treated exactly, making the calculation $\sim 400-900$ times more efficient than the full multi-plane lens equation.
+For either methodology of fitting an external shear (Lens+Shear) or using our 3-D Lens model, we still must choose which galaxies are treated exactly and which are treated in the tidal approximation. Our tests suggest that a conservative cutoff in $\Delta_3 x$ is $10^{-4}$ arcseconds, a factor of 30 smaller than the assumed uncertainties on the observed positions. This cut typically requires 10-15 galaxies of $\sim 300$ galaxies within 5 arcminutes to be treated exactly, making the calculation $\sim 400-900$ times more efficient than the full multi-plane lens equation.
 
-LSST will find an immense number of new strong lens systems. There are various strategies about how to use this upcoming dataset for cosmology. One possibility is to use all of the lenses to beat down uncertainties using statistics. However, if we are entering the systematics-limited regime, this approach will succeed only if one can account for systematic uncertainties (e.g., with our 3-D Lens models). An alternative strategy is to use the large number of lenses discovered by LSST to search for a few rare, ``golden'' lenses that have small systematic uncertainties. One possible criterion for a ``golden'' lens could be to have a weaker contribution from the environment/LOS. Based on our analysis, to minimize environment/LOS effects, we should search for lenses with a large Einstein radius and high ellipticity. These large, asymmetric lenses will be less sensitive to the lens profile degeneracy. While suggestive, these results merit further investigation to get the most out of future surveys like LSST.
+LSST and Euclid will find an immense number of new strong lens systems. There are various strategies about how to use this upcoming data set for cosmology. One possibility is to use all of the lenses to beat down uncertainties using statistics. However, if we are entering the systematics-limited regime, this approach will succeed only if one can account for systematic uncertainties (e.g., with our 3-D Lens models). An alternative strategy is to use the large number of lenses discovered by LSST and Euclid to search for a few rare, ``golden'' lenses that have small systematic uncertainties. One possible criterion for a ``golden'' lens could be to have a weaker contribution from the environment/LOS. Based on our analysis, to minimize environment/LOS effects, we should search for lenses with a large Einstein radius and high ellipticity. These large, asymmetric lenses will be less sensitive to the lens profile degeneracy. While suggestive, these results merit further investigation to get the most out of future surveys like LSST and Euclid.
 
 Throughout this work we have assumed that our 3-D models perfectly describe the environment/LOS, but there is also uncertainty in generating the environment mass models that is only briefly addressed here. This source of uncertainty will be explored in a forthcoming paper (Wong et al., in prep.).
 
 \acknowledgements
-We thank Phil Marshall, Sherry Suyu, Chris Fassnacht, and Stefan Hilbert for enlightening discussions about 3-D lensing. CVM acknowledges support from NSF grant AST-1313484. CRK acknowledges funding from NSF grant AST-1211385. AIZ acknowledges funding from NSF grant AST-1211874 and NASA grant ADP-10AE88G. She also thanks the John Simon Guggenheim Foundation and the Center for Cosmology and Particle Physics at NYU for their support. KCW is supported by an EACOA Fellowship awarded by the East Asia Core Observatories Association, which consists of the Academia Sinica Institute of Astronomy and Astrophysics, the National Astronomical Observatory of Japan, the National Astronomical Observatories of the Chinese Academy of Sciences, and the Korea Astronomy and Space Science Institute.
+We thank the Anonymous Referee for their comments and careful consideration. We thank Edi Rusu, Phil Marshall, Sherry Suyu, Chris Fassnacht, and Stefan Hilbert for enlightening discussions about 3-D lensing. We thank Iair Arcavi and Griffin Hosseinzadeh for discussions about presentation of these results. CVM acknowledges support from NSF grant AST-1313484. CRK acknowledges funding from NSF grant AST-1211385. AIZ acknowledges funding from NSF grant AST-1211874 and NASA grant ADP-10AE88G. She also thanks the John Simon Guggenheim Foundation and the Center for Cosmology and Particle Physics at NYU for their support. KCW is supported by an EACOA Fellowship awarded by the East Asia Core Observatories Association, which consists of the Academia Sinica Institute of Astronomy and Astrophysics, the National Astronomical Observatory of Japan, the National Astronomical Observatories of the Chinese Academy of Sciences, and the Korea Astronomy and Space Science Institute.
 
 
-\bibliographystyle{apj}
+%\bibliographystyle{apj}
+\bibliographystyle{aasjournal}
 \bibliography{sims}
 
 \end{document}
